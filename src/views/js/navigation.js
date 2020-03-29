@@ -1,8 +1,8 @@
 $(document).ready(()=>{
-    const input = getLoginPasswordInput();
-    const btn = $('#loginFormBtn');
-    btn.on('click',authenticate);
-    input.on('keyup',authenticate);
+    $('#loginModal').modal({backdrop: 'static', keyboard: false,show:false});
+    $('#signUpModal').modal({backdrop: 'static', keyboard: false,show:false});
+    $('#loginFormBtn').on('click',authenticate);
+    $('#loginPassword').on('keyup',authenticate);
 });
 async function authenticate(e){
     if(loginRequest(e)){

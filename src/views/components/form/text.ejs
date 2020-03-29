@@ -1,0 +1,14 @@
+<%-include('./error',{text:error})%>
+    <div class="row control-label">
+        <div class="col">
+            <h4><%=label%></h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input id="<%=id%>" name = "<%=name%>" type="<%=type%>"
+                   class="throwsErr form-control" placeholder="<%=placeholder%>">
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,58 @@
+<div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h4 class="modal-title text-center w-100">
+                    Sign Up
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-column text-left">
+                    <form method="POST">
+                        <%- include('./text',{
+                            id:"regEmail",
+                            name:"email",
+                            type:"email",
+                            label:"E-mail",
+                            error:"Please enter your email",
+                            placeholder:"Enter your e-mail"
+                        }); %>
+                        <%- include('./text',{
+                            id:"regConfirmEmail",
+                            name:"confirmEmail",
+                            type:"email",
+                            label:"Confirm E-mail",
+                            error:"Please confirm your e-mail",
+                            placeholder:"Enter your e-mail"
+                        }); %>
+                        <%- include('./text',{
+                            id:"regPassword",
+                            name:"password",
+                            type:"password",
+                            label:"Password",
+                            error:"Please enter your password",
+                            placeholder:"Enter your password"
+                        }); %>
+                        <%- include('./text',{
+                            id:"regConfirmPassword",
+                            name:"password",
+                            type:"password",
+                            label:"Confirm Password",
+                            error:"Passwords do not match",
+                            placeholder:"Confirm your password"
+                        }); %>
+                        <%- include('./button',{
+                            id:"regFormBtn",
+                            type:"button",
+                            label:"Sign Up",
+                            color:"secondary"
+                        }); %>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
