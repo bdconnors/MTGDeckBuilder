@@ -2,8 +2,9 @@ $(document).ready(()=>{
     $('#cardSearch').on('keyup',search);
 });
 function search(e){
-    if(searchSubmitted(e) && searchHasValue()) {
-        const value = document.getElementById('cardSearch').value;
+    const searchBar = document.getElementById('cardSearch');
+    if(searchSubmitted(e) && hasValue(searchBar.value)) {
+        const value = searchBar.value;
         const submission = document.getElementById('cardSearchValue');
         const form = document.getElementById('cardSearchForm');
         submission.value = value;
@@ -11,22 +12,7 @@ function search(e){
     }
 }
 function searchSubmitted(e){
-    const isEnterKey = searchEnterKey(e);
-    const isSearchBtn = searchBtnClicked(e);
+    const isEnterKey = enterKeyPressed(e);
+    const isSearchBtn = e.target.id === 'cardSearchBtn';
     return isEnterKey || isSearchBtn;
-}
-function searchEnterKey(e){
-    let pressed = false;
-    if(e.key){
-        if(e.key === 'Enter'){
-            pressed = true;
-        }
-    }
-    return pressed
-}
-function searchBtnClicked(e){
-    return e.target.id === 'cardSearchBtn';
-}
-function searchHasValue(value){
-    return value !== '';
 }

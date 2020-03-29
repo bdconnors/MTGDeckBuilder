@@ -11,18 +11,24 @@
                     <h4>Login</h4>
                 </div>
                 <div class="d-flex flex-column text-center">
-                    <form method="POST" action="/login">
+                    <p id="loginErr" class="err">Incorrect e-mail or password</p>
+                    <form id="loginForm" method="POST" action="/login">
                         <div class="form-group">
-                            <input id="emai1" name = "email" type="email"
-                                   class="form-control" placeholder="Enter E-mail">
+                            <p id="emailErr" class="err">Please enter your e-mail</p>
+                            <input id="loginEmail" name = "email" type="email"
+                                   class="throwsErr form-control" placeholder="Enter E-mail">
                         </div>
                         <div class="form-group">
-                            <input  id="password" name="password" type="password"
-                                    class="form-control" placeholder="Enter Password">
+                            <p id="passwordErr" class="err">Please enter your password</p>
+                            <input  id="loginPassword" name="password" type="password"
+                                    class="throwsErr form-control" placeholder="Enter Password">
                         </div>
-                        <button type="submit" class="btn btn-secondary btn-block">Login</button>
+                        <button id="loginFormBtn" type="button"
+                                class="btn btn-secondary btn-block">
+                            Login
+                        </button>
                     </form>
-                    </div>
+                </div>
             </div>
         </div>
     </div>

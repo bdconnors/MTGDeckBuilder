@@ -4,10 +4,6 @@ class AuthenticationController extends Controller{
     constructor(service){
         super(service);
     }
-    //GET
-    index(req,res){
-        res.render('login',{err:''});
-    }
     //POST
     async login(req,res){
         const email = req.body.email;
@@ -17,8 +13,14 @@ class AuthenticationController extends Controller{
             req.session.user = this.service.getUser(email);
             res.send(req.session.user);
         }else{
-            res.render('login',{err:'Incorrect e-mail or password'});
+            res.redirect('/');
         }
+    }
+    async verify(req,res){
+        const email = req.body.email;
+        const password = req.body.password;
+        const authenticated = await this.service.authenticate(email,password);
+        res.send(authenticated);
     }
 }
 module.exports = AuthenticationController;
