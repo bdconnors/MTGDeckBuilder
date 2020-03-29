@@ -1,2 +1,2 @@
-# bdc5435-rit.edu
+#MTG Deck Builder
 MTGDeckBuilder
