@@ -1,0 +1,10 @@
+<%-include('components/head',{title:'MTG Deck Builder|card.name'})%>
+<%-include('components/navigation')%>
+<div class="main">
+    <table class="mlr-auto">
+        <tbody>
+            <%-include('components/search/result',{result:card})%>
+        </tbody>
+    </table>
+</div>
+<%- include('components/foot',{ scripts:['navigation'],styles:[]})%>

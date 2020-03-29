@@ -1,0 +1,9 @@
+<%-include('components/head',{title:'MTG Deck Builder|Home'})%>
+<%-include('components/navigation')%>
+<div class="main">
+    <%-include('components/search/bar')%>
+    <%if(results !== -1){%>
+        <%-include('components/search/results',{results:results})%>
+    <%}%>
+</div>
+<%-include('components/foot',{scripts:['search','navigation','login'],styles:['search','login']})%>

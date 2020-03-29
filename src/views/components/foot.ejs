@@ -1,0 +1,11 @@
+    <!--CSS-->
+<%   for(let i = 0; i < styles.length; i++){
+%>      <%-include('./style',{style:styles[i]})%>
+<%   }
+%>  <!--Scripts-->
+<%   for(let i = 0; i < scripts.length; i++){
+%>      <%-include('./script',{script:scripts[i]})%>
+<%   }
+%>
+</body>
+</html>

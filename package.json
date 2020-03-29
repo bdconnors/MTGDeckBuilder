@@ -1,0 +1,39 @@
+{
+  "name": "mtgapplication",
+  "version": "1.0.0",
+  "description": "Deck editor and card searcher for Magic the Gathering TCG",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rjg5314/MTGApplication.git"
+  },
+  "keywords": [
+    "Mtg",
+    "magic",
+    "the",
+    "gathering",
+    "deck",
+    "editor"
+  ],
+  "author": "Ryan Garcia <rjg5314@rit.edu>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rjg5314/MTGApplication/issues"
+  },
+  "homepage": "https://github.com/rjg5314/MTGApplication#readme",
+  "dependencies": {
+    "bcrypt": "^4.0.1",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "jsonwebtoken": "^8.5.1",
+    "mtgsdk": "^0.4.3",
+    "mysql2": "^2.1.0",
+    "uuid": "^7.0.2"
+  }
+}

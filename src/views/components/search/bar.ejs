@@ -1,0 +1,11 @@
+<div class="input-group">
+    <input id="cardSearch" type="text" class="form-control" placeholder="Search Cards">
+    <div class="input-group-append">
+        <button id="cardSearchBtn" class="btn btn-secondary" type="button" onclick="search()">
+            <i class="fa fa-search"></i>
+        </button>
+    </div>
+</div>
+<form id="cardSearchForm" method="GET" action="/cards">
+    <input id="cardSearchValue" type="hidden" name="name">
+</form>
