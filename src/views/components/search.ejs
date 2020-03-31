@@ -1,0 +1,6 @@
+<div class="main">
+    <%-include('./search/bar')%>
+    <%if(results !== -1){%>
+        <%-include('./search/results',{results:results})%>
+    <%}%>
+</div>

@@ -10,7 +10,13 @@ class Repository {
         return this.entities;
     }
     filter(prop,value){
-        return this.entities.filter((entity)=>{return entity[prop] === value});
+        return this.entities.filter((entity)=>{
+            console.log(prop);
+            console.log(value);
+            console.log(entity);
+            console.log(entity[prop] === value);
+            return entity[prop] === value
+        });
     }
     async load(){
         const query = queryBuilder.retrieve(this.table);
@@ -35,7 +41,6 @@ class Repository {
     }
     retrieve(id){
         return this.entities.find((entity)=>{
-            console.log(entity);
             return entity.id === id
         });
     }
@@ -70,6 +75,7 @@ class Repository {
     exists(prop,value){
         let exists = false;
         const results = this.filter(prop,value);
+        console.log(results);
         if(results.length !== 0){
             exists = true;
         }

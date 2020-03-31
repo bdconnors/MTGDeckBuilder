@@ -51,7 +51,7 @@ const storedProcedure = (method,name,values) => {
             query +=`,`;
         }
     }
-    query += `);`;
+    query += `)`;
     return query;
 };
 const getParams = (values) => {

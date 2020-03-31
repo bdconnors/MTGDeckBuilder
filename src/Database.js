@@ -5,8 +5,8 @@ class Database {
         this.config = config;
         this.conn = null;
     }
-    connect(){
-        this.conn = mysql.createConnection(this.config);
+    async connect(){
+        this.conn = await mysql.createConnection(this.config);
     }
     /**
      * @statement prepared statement or stored procedure call string
@@ -16,7 +16,7 @@ class Database {
      * in an array
      * **/
     async execute(statement,params){
-        return new Promise((resolve,reject)=>{
+        return await new Promise((resolve,reject)=>{
             this.conn.execute(statement,params,(err,res,fields)=>{
                 if(err){reject(err);}
                 resolve(res);

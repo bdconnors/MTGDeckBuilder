@@ -1,5 +1,5 @@
 class Card {
-    constructor(id,name,cost,cmc,set,types,superTypes,subTypes,colors,rarity,text,img){
+    constructor(id,name,cost = 0,cmc,set,types,superTypes,subTypes,colors,rarity,text,img){
         this.id = id;
         this.name = name;
         this.cost = cost;

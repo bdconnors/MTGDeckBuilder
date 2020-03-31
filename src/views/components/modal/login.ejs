@@ -1,0 +1,42 @@
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h4 class="modal-title text-center w-100">
+                    Sign In
+                    <%-include('./close',{id:"loginClose"})%>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-column text-left">
+                    <div id="loginErr" class="row" ></div>
+                    <form id="loginForm" method="POST" action="/login" onsubmit = "return false">
+<%-                     include('../form/text',{
+                            id:"loginEmail",
+                            name:"email",
+                            type:"email",
+                            label:"E-mail:",
+                            placeholder:"Enter your e-mail"
+                        });
+%>
+<%-                     include('../form/text',{
+                            id:"loginPassword",
+                            name:"password",
+                            type:"password",
+                            label:"Password:",
+                            placeholder:"Enter your password"
+                        });
+%>
+<%-                     include('../form/button',{
+                            id:"loginSubmit",
+                            type:"submit",
+                            cssClass:["btn","btn-secondary","btn-block"],
+                            label:"Sign In",
+                            icon:"power-off"
+                        });
+%>                  </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

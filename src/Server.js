@@ -20,7 +20,6 @@ class Server {
     register(controller,routes){
         for(let i = 0; i < routes.length; i++){
             let route = routes[i];
-            console.log(route);
             this.router[route.method](route.path,controller[route.endpoint].bind(controller));
         }
     }

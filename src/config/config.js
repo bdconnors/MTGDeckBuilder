@@ -3,5 +3,6 @@ global.CONFIG = {
     DB:require('./db'),
     ROUTES:require('./routes/routes'),
     ENCRYPTION:require('./encryption'),
-    GAME_FORMAT:'standard'
+    PROXY:require('./proxy.js')
+
 };

@@ -7,21 +7,21 @@ const Card = require('../models/Card');
  *
  * **/
 const query = async(query)=>{
-    query.gameFormat = CONFIG.GAME_FORMAT;
+    query.gameFormat = CONFIG.PROXY.GAME_FORMAT;
+    const results = [];
     const totalResults = await mtg.card.where(query);
-    const currentResults = [];
     totalResults.forEach((queryResult)=>{
-        if(!alreadyExists(queryResult.name,currentResults)) {
+        if(!alreadyExists(queryResult.name,results)) {
             if (hasMultipleVersions(queryResult.name, totalResults)) {
                 const imageVersion = getVersionWithImage(queryResult.name, totalResults);
-                currentResults.push(imageVersion);
+                results.push(imageVersion);
             } else {
-                currentResults.push(queryResult);
+                results.push(queryResult);
             }
         }
 
     });
-    return process(currentResults);
+    return process(results);
 };
 /**
  * @id an id string of the requested card
@@ -30,9 +30,7 @@ const query = async(query)=>{
  *
  * **/
 const getCard = async(id)=>{
-    const result = await query({id:id});
-    console.log('in api proxy');
-    console.log(result);
+    const result = await query({multiverseid:id});
     return result[0];
 };
 /**
@@ -43,7 +41,7 @@ const getCard = async(id)=>{
  *
  * **/
 const make = (values) =>{
-    return new Card(values.id,
+    return new Card(values.multiverseid,
         values.name,
         values.manaCost,
         values.cmc,
@@ -75,9 +73,9 @@ const getVersionWithImage = (name,totalResults)=>{
     }
     return first;
 };
-const hasMultipleVersions = (name,totalResults) =>{
+const hasMultipleVersions = (name,results) =>{
     let hasMultiple = false;
-    const versions = getAllVersions(name,totalResults);
+    const versions = getAllVersions(name,results);
     if(versions.length > 1){
         hasMultiple = true;
     }
@@ -90,9 +88,9 @@ const hasImage =(version)=> {
     }
     return imageExists;
 };
-const alreadyExists = (name,currentResults) => {
+const alreadyExists = (name,results) => {
     let exists = false;
-    const resultExists = currentResults.find((result)=>{
+    const resultExists = results.find((result)=>{
         return result.name === name;
     });
     if(resultExists){
@@ -100,8 +98,8 @@ const alreadyExists = (name,currentResults) => {
     }
     return exists;
 };
-const getAllVersions = (name,totalResults) =>{
-    return totalResults.filter((version)=> {
+const getAllVersions = (name,results) =>{
+    return results.filter((version)=> {
         return version.name === name;
     });
 };

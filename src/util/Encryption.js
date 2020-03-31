@@ -12,7 +12,7 @@ module.exports.hash = async (data) => {
     return new Promise((res,rej)=>{
         const saltRounds = CONFIG.ENCRYPTION.SALT;
         bcrypt.hash(data,saltRounds,(err,hash)=>{
-            if(err){rej(err)};
+            if(err){rej(err)}
             res(hash);
         });
     });

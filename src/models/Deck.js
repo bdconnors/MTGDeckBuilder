@@ -8,6 +8,11 @@ class Deck {
     addCard(card,copies){
         this.cards.push(new DeckCard(this.id,card,copies));
     }
+    getCard(id){
+        return this.cards.find((card)=>{
+            return card.card.id === id;
+        });
+    }
 
 
 }

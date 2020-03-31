@@ -7,20 +7,25 @@
     <div class='navbar-collapse collapse w-100 order-3 dual-collapse2'>
         <ul class='navbar-nav ml-auto'>
             <li class="nav-item">
-                <button type="button" class="btn btn-secondary" onclick="toggleModal('loginModal',true)">
-                    Sign In
-                </button>
+                <%-include('./form/button',{
+                    id:"loginShow",
+                    type:"button",
+                    cssClass:["btn","btn-secondary"],
+                    label:"Sign In",
+                    icon:"power-off"
+                });%>
             </li>
             <li class="nav-item">
-                |
-            </li>
-            <li class="nav-item">
-                <button type="button" class="btn btn-secondary" onclick="toggleModal('signUpModal',true)">
-                    Sign Up
-                </button>
+                <%-include('./form/button',{
+                    id:"signUpShow",
+                    type:"button",
+                    cssClass:["btn","btn-secondary"],
+                    label:"Sign Up",
+                    icon:"user-plus"
+                });%>
             </li>
         </ul>
     </div>
 </nav>
-<%- include('./form/login'); %>
-<%- include('./form/register'); %>
+<%- include('./modal/login'); %>
+<%- include('./modal/register'); %>

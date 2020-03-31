@@ -4,53 +4,57 @@
             <div class="modal-header border-bottom-0">
                 <h4 class="modal-title text-center w-100">
                     Sign Up
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <%-include('./close',{id:"signUpClose"})%>
                 </h4>
             </div>
             <div class="modal-body">
                 <div class="d-flex flex-column text-left">
-                    <form method="POST">
-                        <%- include('./text',{
-                            id:"regEmail",
+                    <div id="signUpErr" class="row" ></div>
+                    <form id="signUpForm" method="POST" action="/register" onsubmit="return false">
+<%-                     include('../form/text',{
+                            id:"signUpEmail",
                             name:"email",
                             type:"email",
                             label:"E-mail",
                             error:"Please enter your email",
                             placeholder:"Enter your e-mail"
-                        }); %>
-                        <%- include('./text',{
-                            id:"regConfirmEmail",
+                        });
+%>
+<%-                     include('../form/text',{
+                            id:"signUpConfirmEmail",
                             name:"confirmEmail",
                             type:"email",
                             label:"Confirm E-mail",
                             error:"Please confirm your e-mail",
                             placeholder:"Enter your e-mail"
-                        }); %>
-                        <%- include('./text',{
-                            id:"regPassword",
+                        });
+%>
+<%-                     include('../form/text',{
+                            id:"signUpPassword",
                             name:"password",
                             type:"password",
                             label:"Password",
                             error:"Please enter your password",
                             placeholder:"Enter your password"
-                        }); %>
-                        <%- include('./text',{
-                            id:"regConfirmPassword",
+                        });
+%>
+<%-                     include('../form/text',{
+                            id:"signUpConfirmPassword",
                             name:"password",
                             type:"password",
                             label:"Confirm Password",
                             error:"Passwords do not match",
                             placeholder:"Confirm your password"
-                        }); %>
-                        <%- include('./button',{
-                            id:"regFormBtn",
-                            type:"button",
+                        });
+%>
+<%-                     include('../form/button',{
+                            id:"signUpSubmit",
+                            type:"submit",
+                            cssClass:["btn","btn-secondary","btn-block"],
                             label:"Sign Up",
-                            color:"secondary"
-                        }); %>
-                    </form>
+                            icon:"user-plus"
+                        });
+%>                   </form>
                 </div>
             </div>
         </div>

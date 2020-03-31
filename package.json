@@ -34,6 +34,7 @@
     "jsonwebtoken": "^8.5.1",
     "mtgsdk": "^0.4.3",
     "mysql2": "^2.1.0",
+    "request": "^2.88.2",
     "uuid": "^7.0.2"
   }
 }

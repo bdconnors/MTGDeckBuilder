@@ -23,7 +23,7 @@ const database = new Database(CONFIG.DB);
 const userRepo = new UserRepository(database);
 const deckRepo = new DeckRepository(database);
 //instantiate services
-const cardService = new CardService(CONFIG.GAME_FORMAT);
+const cardService = new CardService();
 const authService = new AuthenticationService(userRepo);
 const userService = new UserService(userRepo);
 const deckService = new DeckService(deckRepo);
@@ -48,7 +48,8 @@ server.register(decks,CONFIG.ROUTES.DECKS);
 async function load() {
     await userRepo.load();
     await deckRepo.load();
-    console.log(deckRepo.retrieve(7));
+    console.log(deckRepo.retrieve(10).cards);
+    console.log(userRepo.all());
 }
 /**
  * Starts the server
@@ -56,7 +57,7 @@ async function load() {
  * loads the records into the repositories
  * **/
 async function start(){
-    database.connect();
+    await database.connect();
     await load();
     server.start();
 }

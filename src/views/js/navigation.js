@@ -1,101 +1,107 @@
 $(document).ready(()=>{
-    $('#loginModal').modal({backdrop: 'static', keyboard: false,show:false});
-    $('#signUpModal').modal({backdrop: 'static', keyboard: false,show:false});
-    $('#loginFormBtn').on('click',authenticate);
-    $('#loginPassword').on('keyup',authenticate);
+    setUpModalForm(MODAL.LOGIN,login);
+    setUpModalForm(MODAL.SIGN_UP,signUp);
 });
-async function authenticate(e){
-    if(loginRequest(e)){
-        clearErrors();
-        let verified = true;
-        const credentials = {
-            email:getLoginEmail(),
-            password:getLoginPassword()
-        };
-        const authenticated = await request('/verify','POST',credentials);
-        console.log(authenticated);
-        if(!authenticated){verified = false;}
-        login(verified);
+function signUp(){
+
+    const signUp = signUpValues();
+    const errorDisplay = MODAL.SIGN_UP.ERROR_DISPLAY;
+
+    clearFormErrors(errorDisplay,Object.values(MODAL.SIGN_UP.INPUT));
+    checkSignUpEmail(signUp);
+    checkSignUpPassword(signUp);
+
+    if(signUp.errors){
+        formErrors(signUp.errorMsgs,errorDisplay,signUp.errorInputs);
     }
 }
-function login(verified){
-    if(verified){
-        const form = $('#loginForm');
-        form.submit();
+async function login(){
+
+    const login = loginValues();
+
+    clearFormErrors(MODAL.LOGIN.ERROR_DISPLAY,Object.values(MODAL.LOGIN.INPUT));
+    checkLoginEmail(login);
+    checkLoginPassword(login);
+
+    if(login.errors){
+        formErrors(login.errorMsgs,MODAL.LOGIN.ERROR_DISPLAY,login.errorInputs);
     }else{
-        displayError('login',['email','password']);
-    }
-}
-function displayError(type,effected){
-    console.log(type,effected);
-    highlightEffectedInputs(effected);
-    displayErrorText(type);
-}
-function displayErrorText(type){
-    const errId = type+'Err';
-    console.log(errId);
-    $('.err').filter((i)=>{
-        const cur = $('.err')[i];
-        const isErr = cur.id === errId;
-        if(isErr){
-            const id = '#'+cur.id;
-            const err = $(id);
-            console.log(err);
-            err.css('display','block');
-        }
-    });
-}
-function highlightEffectedInputs(effected){
-    $('.throwsErr').filter((i)=>{
-        const cur = $('.throwsErr')[i];
-        const name = cur.name;
-        const isEffected = effected.includes(name);
-        if(isEffected){
-            const id = '#'+cur.id;
-            const input = $(id);
-            input.css('background-color','pink');
-        }
-    });
-}
-function clearErrors(){
-    clearAllErrorText();
-    clearHighlightedInputs();
-}
-function clearAllErrorText(){
-    $('.throwsErr').filter((i)=>{
-        const cur = $('.err')[i].id;
-        const id = '#'+cur;
-        const err = $(id);
-        err.css('display','none');
-    });
-}
-function clearHighlightedInputs(){
-    $('.throwsErr').filter((i)=>{
-        const cur =  $('.throwsErr')[i];
-        const id = '#' + cur.id;
-        const input = $(id);
-        input.css('background-color', 'white');
-    });
-}
-function loginRequest(e){
-    const isLoginBtn = e.target.id === 'loginFormBtn';
-    let isEnterKey = false;
-    if(e.key){
-        if(e.key === 'Enter'){
-            isEnterKey = true;
+        const authenticated = await request(
+            '/verify',
+            'POST',
+            {email:login.email,password:login.password}
+        );
+        if (authenticated) {
+            const form = $(MODAL.LOGIN.FORM);
+            form.submit();
+        } else {
+            const effectedInputs = Object.values(MODAL.LOGIN.INPUT);
+            formErrors(['*Incorrect e-mail or password'],MODAL.LOGIN.ERROR_DISPLAY,effectedInputs);
         }
     }
-    return isEnterKey || isLoginBtn;
 }
-function getLoginPasswordInput(){
-    return $('#loginPassword');
+function checkLoginEmail(login){
+    if(!hasValue(login.email)){
+        login.errors = true;
+        login.errorMsgs.push('*Enter your e-mail');
+        login.errorInputs.push(MODAL.LOGIN.INPUT.EMAIL);
+    }
 }
-function getLoginEmailInput(){
-    return  $('#loginEmail');
+function checkLoginPassword(login){
+    if(!hasValue(login.password)){
+        login.errors = true;
+        login.errorMsgs.push('*Enter your password');
+        login.errorInputs.push(MODAL.LOGIN.INPUT.PASSWORD);
+    }
 }
-function getLoginEmail(){
-    return getLoginEmailInput().val();
+function checkSignUpEmail(signUp){
+    const empty = !hasValue(signUp.email);
+    if(empty){
+        signUp.errors = true;
+        signUp.errorMsgs.push('*Enter your e-mail');
+        signUp.errorInputs.push(MODAL.SIGN_UP.INPUT.EMAIL);
+    }else {
+        const match = signUp.confirmEmail === signUp.email;
+        if (!match) {
+            signUp.errors = true;
+            signUp.errorMsgs.push('*E-mails do not match');
+            signUp.errorInputs.push(MODAL.SIGN_UP.INPUT.CONFIRM_EMAIL);
+        }
+    }
 }
-function getLoginPassword(){
-    return getLoginPasswordInput().val();
+function checkSignUpPassword(signUp){
+    const empty = !hasValue(signUp.password);
+    if(empty){
+        signUp.errors = true;
+        signUp.errorMsgs.push('*Enter a password');
+        signUp.errorInputs.push(MODAL.SIGN_UP.INPUT.PASSWORD);
+    }else {
+        const match = signUp.confirmPass === signUp.password;
+        if (!match) {
+            signUp.errors = true;
+            signUp.errorMsgs.push('*Passwords do not match');
+            signUp.errorInputs.push(MODAL.SIGN_UP.INPUT.CONFIRM_PASSWORD);
+        }
+    }
+}
+function loginValues(){
+    const input = MODAL.LOGIN.INPUT;
+    return {
+        email:$(input.EMAIL).val(),
+        password:$(input.PASSWORD).val(),
+        errorMsgs:[],
+        errorInputs:[]
+    }
+}
+function signUpValues(){
+    const input = MODAL.SIGN_UP.INPUT;
+    return {
+        email: $(input.EMAIL).val(),
+        confirmEmail: $(input.CONFIRM_EMAIL).val(),
+        password: $(input.PASSWORD).val(),
+        confirmPass: $(input.CONFIRM_PASSWORD).val(),
+        errors:false,
+        errorMsgs:[],
+        errorInputs:[]
+    };
 }
