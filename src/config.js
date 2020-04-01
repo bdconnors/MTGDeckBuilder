@@ -1,3 +1,5 @@
+const uuid = require('uuid');
+
 global.CONFIG = {
     SERVER:{
         HOST:'localhost',
