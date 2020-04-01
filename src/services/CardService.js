@@ -10,7 +10,5 @@ class CardService{
     async getCard(id){
         return await api.getCard(id);
     }
-
-
 }
 module.exports = CardService;

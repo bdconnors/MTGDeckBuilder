@@ -1,6 +1,5 @@
 const Repository = require('./Repository.js');
 const Deck = require('../models/Deck');
-const DeckCard = require('../models/DeckCard');
 const queryBuilder = require('../util/QueryBuilder');
 const api = require('../util/ApiProxy');
 

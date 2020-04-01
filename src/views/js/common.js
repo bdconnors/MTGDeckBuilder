@@ -7,9 +7,6 @@ function enterKeyPressed(e){
     }
     return pressed
 }
-function hasValue(value){
-    return value !== '';
-}
 function toggleModal(id,show){
     if(show){
         $(id).modal('show');
@@ -64,4 +61,27 @@ function resetForm(id,errorDisplay,inputs){
     clearFormErrors(errorDisplay,inputs);
     $(id)[0].reset();
 
+}
+function validEmail(email){
+    const crossSiteAttack = !xssFilters.inHTMLData(email);
+    email = sanitize(email);
+    const empty = validator.isEmpty(email);
+    const valid = validator.isEmail(email);
+    return !crossSiteAttack && !empty && valid;
+}
+function validPassword(password){
+    const crossSiteAttack = !xssFilters.inHTMLData(password);
+    password = sanitize(password);
+    const empty = validator.isEmpty(password);
+    const valid = validator.isAlphanumeric(password);
+    return !crossSiteAttack && !empty && valid;
+}
+function sanitize(value){
+    value = validator.escape(value);
+    value = validator.trim(value);
+    value = validator.stripLow(value);
+    return value;
+}
+function match(value1,value2){
+    return value1 === value2;
 }
