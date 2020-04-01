@@ -17,7 +17,6 @@ class AuthenticationController extends Controller{
         }
     }
     async verify(req,res){
-        console.log(req.body);
         const email = req.body.email;
         const password = req.body.password;
         const authenticated = await this.service.authenticate(email,password);

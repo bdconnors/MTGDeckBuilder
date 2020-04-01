@@ -5,32 +5,28 @@ $(document).ready(()=>{
 function signUp(){
 
     const signUp = signUpValues();
+    const valid = validSignUp(signUp);
     const errorDisplay = MODAL.SIGN_UP.ERROR_DISPLAY;
 
     clearFormErrors(errorDisplay,Object.values(MODAL.SIGN_UP.INPUT));
-    checkSignUpEmail(signUp);
-    checkSignUpPassword(signUp);
-
-    if(signUp.errors){
+    console.log('valid sign up?: '+valid);
+    if(!valid){
         formErrors(signUp.errorMsgs,errorDisplay,signUp.errorInputs);
     }
 }
 async function login(){
 
     const login = loginValues();
-
+    const valid = validLogin(login);
     clearFormErrors(MODAL.LOGIN.ERROR_DISPLAY,Object.values(MODAL.LOGIN.INPUT));
-    checkLoginEmail(login);
-    checkLoginPassword(login);
-
-    if(login.errors){
-        formErrors(login.errorMsgs,MODAL.LOGIN.ERROR_DISPLAY,login.errorInputs);
-    }else{
+    console.log('valid login: '+valid);
+    if(valid){
         const authenticated = await request(
             '/verify',
             'POST',
             {email:login.email,password:login.password}
         );
+        console.log('Authenticated: '+authenticated);
         if (authenticated) {
             const form = $(MODAL.LOGIN.FORM);
             form.submit();
@@ -38,57 +34,59 @@ async function login(){
             const effectedInputs = Object.values(MODAL.LOGIN.INPUT);
             formErrors(['*Incorrect e-mail or password'],MODAL.LOGIN.ERROR_DISPLAY,effectedInputs);
         }
+    }else{
+        formErrors(login.errorMsgs,MODAL.LOGIN.ERROR_DISPLAY,login.errorInputs);
     }
 }
-function checkLoginEmail(login){
-    if(!hasValue(login.email)){
+function validLogin(login){
+    if(!validPassword(login.password) || !validEmail(login.email)){
         login.errors = true;
-        login.errorMsgs.push('*Enter your e-mail');
+        login.errorMsgs.push('*Invalid e-mail or password');
         login.errorInputs.push(MODAL.LOGIN.INPUT.EMAIL);
-    }
-}
-function checkLoginPassword(login){
-    if(!hasValue(login.password)){
-        login.errors = true;
-        login.errorMsgs.push('*Enter your password');
         login.errorInputs.push(MODAL.LOGIN.INPUT.PASSWORD);
     }
+    console.log(login);
+    return !login.errors;
 }
-function checkSignUpEmail(signUp){
-    const empty = !hasValue(signUp.email);
-    if(empty){
+function validSignUp(signUp){
+    const validEmail = validateSignUpEmail(signUp);
+    const validPassword = validateSignUpPassword(signUp);
+    return validEmail && validPassword;
+}
+function validateSignUpEmail(signUp){
+    if(!validEmail(signUp.email)){
         signUp.errors = true;
-        signUp.errorMsgs.push('*Enter your e-mail');
+        signUp.errorMsgs.push('*Invalid e-mail');
         signUp.errorInputs.push(MODAL.SIGN_UP.INPUT.EMAIL);
     }else {
-        const match = signUp.confirmEmail === signUp.email;
-        if (!match) {
+        if (!match(signUp.email,signUp.confirmEmail)) {
             signUp.errors = true;
             signUp.errorMsgs.push('*E-mails do not match');
             signUp.errorInputs.push(MODAL.SIGN_UP.INPUT.CONFIRM_EMAIL);
         }
     }
+    return !signUp.errors;
 }
-function checkSignUpPassword(signUp){
-    const empty = !hasValue(signUp.password);
-    if(empty){
+function validateSignUpPassword(signUp){
+    if(!validPassword(signUp.password)){
         signUp.errors = true;
-        signUp.errorMsgs.push('*Enter a password');
+        signUp.errorMsgs.push('*Invalid password');
         signUp.errorInputs.push(MODAL.SIGN_UP.INPUT.PASSWORD);
     }else {
-        const match = signUp.confirmPass === signUp.password;
-        if (!match) {
+        if (!match(signUp.password,signUp.confirmPass)) {
             signUp.errors = true;
             signUp.errorMsgs.push('*Passwords do not match');
             signUp.errorInputs.push(MODAL.SIGN_UP.INPUT.CONFIRM_PASSWORD);
         }
     }
+    return !signUp.errors;
 }
 function loginValues(){
     const input = MODAL.LOGIN.INPUT;
     return {
         email:$(input.EMAIL).val(),
         password:$(input.PASSWORD).val(),
+        errors:false,
         errorMsgs:[],
         errorInputs:[]
     }

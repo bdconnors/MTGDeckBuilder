@@ -48,8 +48,6 @@ server.register(decks,CONFIG.ROUTES.DECKS);
 async function load() {
     await userRepo.load();
     await deckRepo.load();
-    console.log(deckRepo.retrieve(10).cards);
-    console.log(userRepo.all());
 }
 /**
  * Starts the server
