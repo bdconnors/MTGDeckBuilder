@@ -1,18 +1,23 @@
-$(document).ready(()=>{
-    $('#cardSearch').on('keyup',search);
-});
-function search(e){
-    const searchBar = document.getElementById('cardSearch');
-    if(searchSubmitted(e) && hasValue(searchBar.value)) {
-        const value = searchBar.value;
-        const submission = document.getElementById('cardSearchValue');
-        const form = document.getElementById('cardSearchForm');
-        submission.value = value;
-        form.submit();
+const search = {
+    submit: (e) => {
+
+        const isSubmitBtn = e.target === ELEMENTS.SEARCH_BAR.SUBMIT_BTN;
+        const isEnterKey = common.enterKeyPressed(e);
+
+        if(isEnterKey || isSubmitBtn) {
+            const searchBar = $(ELEMENTS.SEARCH_BAR.ID);
+            const value = searchBar.val();
+            const empty = validator.isEmpty(value,{ignore_whitespace:true});
+            if(!empty) {
+                const form = $(ELEMENTS.SEARCH_BAR.FORM);
+                const submission = $(ELEMENTS.SEARCH_BAR.VALUE);
+                submission.val(value);
+                form.submit();
+            }
+        }
     }
-}
-function searchSubmitted(e){
-    const isEnterKey = enterKeyPressed(e);
-    const isSearchBtn = e.target.id === 'cardSearchBtn';
-    return isEnterKey || isSearchBtn;
-}
+};
+$(document).ready(() => {
+    $(ELEMENTS.SEARCH_BAR.ID).on('keyup', search.submit);
+    $(ELEMENTS.SEARCH_BAR.SUBMIT_BTN).on('click',search.submit);
+});
