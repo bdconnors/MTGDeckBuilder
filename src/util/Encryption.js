@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const uuid = require('uuid');
 /**
  *
  * @data a string of data
@@ -24,7 +23,4 @@ module.exports.compare = async (data,hash)=>{
             res(result);
         });
     });
-};
-module.exports.uuid = () =>{
-    return uuid.v4();
 };

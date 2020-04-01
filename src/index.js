@@ -1,5 +1,5 @@
 //use application configuration
-require('./config/config');
+require('./config');
 //import base application components
 const Database = require('./Database');
 const Server = require('./Server');

@@ -11,10 +11,6 @@ class Repository {
     }
     filter(prop,value){
         return this.entities.filter((entity)=>{
-            console.log(prop);
-            console.log(value);
-            console.log(entity);
-            console.log(entity[prop] === value);
             return entity[prop] === value
         });
     }
