@@ -9,7 +9,6 @@ function signUp(){
     const errorDisplay = MODAL.SIGN_UP.ERROR_DISPLAY;
 
     clearFormErrors(errorDisplay,Object.values(MODAL.SIGN_UP.INPUT));
-    console.log('valid sign up?: '+valid);
     if(!valid){
         formErrors(signUp.errorMsgs,errorDisplay,signUp.errorInputs);
     }
@@ -19,14 +18,12 @@ async function login(){
     const login = loginValues();
     const valid = validLogin(login);
     clearFormErrors(MODAL.LOGIN.ERROR_DISPLAY,Object.values(MODAL.LOGIN.INPUT));
-    console.log('valid login: '+valid);
     if(valid){
         const authenticated = await request(
             '/verify',
             'POST',
             {email:login.email,password:login.password}
         );
-        console.log('Authenticated: '+authenticated);
         if (authenticated) {
             const form = $(MODAL.LOGIN.FORM);
             form.submit();
@@ -45,7 +42,6 @@ function validLogin(login){
         login.errorInputs.push(MODAL.LOGIN.INPUT.EMAIL);
         login.errorInputs.push(MODAL.LOGIN.INPUT.PASSWORD);
     }
-    console.log(login);
     return !login.errors;
 }
 function validSignUp(signUp){
