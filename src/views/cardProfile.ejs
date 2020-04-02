@@ -1,10 +1,6 @@
 <%-include('components/head',{title:'MTG Deck Builder|card.name'})%>
 <%-include('components/navigation')%>
-<div class="main">
-    <table class="mlr-auto">
-        <tbody>
-            <%-include('components/cardProfile',{card:card})%>
-        </tbody>
-    </table>
+<div class="body-container mlr-auto">
+    <%-include('components/card',{card:card})%>
 </div>
 <%- include('components/foot',{ scripts:['navigation'],styles:[]})%>

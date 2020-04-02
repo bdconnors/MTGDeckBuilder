@@ -23,6 +23,9 @@ const query = async(query)=>{
     });
     return process(results);
 };
+const getAllCards = async() =>{
+    return await query({});
+};
 /**
  * @id an id string of the requested card
  *
@@ -113,6 +116,7 @@ const process = (results) =>{
     return cards;
 };
 module.exports.query = query;
+module.exports.getAllCards = getAllCards;
 module.exports.getCard = getCard;
 module.exports.process = process;
 module.exports.make = make;

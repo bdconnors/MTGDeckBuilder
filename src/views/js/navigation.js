@@ -9,23 +9,29 @@ const navigation = {
         common.clearFormErrors(errorDisplay, Object.values(ELEMENTS.MODAL.SIGN_UP.INPUT));
 
         if (valid) {
-            const registered = await common.request(
-                '/register',
-                'POST',
-                {email: signUp.email, password: signUp.password}
-            );
-            if (registered) {
-                const successMsgs = ['Sign up successful please sign in!'];
-                const successDisplay = ELEMENTS.MODAL.LOGIN.MSG_DISPLAY;
-                common.toggleModal(ELEMENTS.MODAL.SIGN_UP.ID,false);
-                common.toggleModal(ELEMENTS.MODAL.LOGIN.ID,true);
-                common.displayMessages(successDisplay,successMsgs,'16px','green','bold');
-            } else {
-                const errorMessage = ['*Unable to process sign up at this time'];
-                const errorDisplay = ELEMENTS.MODAL.SIGN_UP.MSG_DISPLAY;
-                const effectedInputs = Object.values(ELEMENTS.MODAL.SIGN_UP.INPUT);
-                common.formErrors(errorMessage,errorDisplay,effectedInputs);
-            }
+            await $.ajax({
+                url:'/register',
+                method:'POST',
+                data:{
+                    email: signUp.email,
+                    password: signUp.password
+                },
+                statusCode:{
+                    200:()=>{
+                        const successMsgs = ['Sign up successful please sign in!'];
+                        const successDisplay = ELEMENTS.MODAL.LOGIN.MSG_DISPLAY;
+                        common.toggleModal(ELEMENTS.MODAL.SIGN_UP.ID,false);
+                        common.toggleModal(ELEMENTS.MODAL.LOGIN.ID,true);
+                        common.displayMessages(successDisplay,successMsgs,'16px','green','bold');
+                    },
+                    500:()=>{
+                        const errorMessage = ['*Unable to process sign up at this time'];
+                        const errorDisplay = ELEMENTS.MODAL.SIGN_UP.MSG_DISPLAY;
+                        const effectedInputs = Object.values(ELEMENTS.MODAL.SIGN_UP.INPUT);
+                        common.formErrors(errorMessage,errorDisplay,effectedInputs);
+                    }
+                }
+            });
         }else {
             common.formErrors(signUp.errorMsgs, errorDisplay, signUp.errorInputs);
         }
@@ -38,20 +44,28 @@ const navigation = {
         common.clearFormErrors(ELEMENTS.MODAL.LOGIN.MSG_DISPLAY, Object.values(ELEMENTS.MODAL.LOGIN.INPUT));
 
         if (valid) {
-            const authenticated = await common.request(
-                '/verify',
-                'POST',
-                {email: login.email, password: login.password}
-            );
-            if (authenticated) {
-                const form = $(ELEMENTS.MODAL.LOGIN.FORM);
-                form.submit();
-            } else {
-                const errorMessage = ['*Incorrect e-mail or password'];
-                const errorDisplay = ELEMENTS.MODAL.LOGIN.MSG_DISPLAY;
-                const effectedInputs = Object.values(ELEMENTS.MODAL.LOGIN.INPUT);
-                common.formErrors(errorMessage, errorDisplay, effectedInputs);
-            }
+            await $.ajax({
+                url:'/verify',
+                method:'POST',
+                data:{
+                    email: login.email,
+                    password: login.password
+                },
+                statusCode:{
+                    200:()=>{
+                        const form = $(ELEMENTS.MODAL.LOGIN.FORM);
+                        form.submit();
+                    },
+                    401:()=>{
+                        console.log('bad login');
+                        const errorMessage = ['*Incorrect e-mail or password'];
+                        const errorDisplay = ELEMENTS.MODAL.LOGIN.MSG_DISPLAY;
+                        const effectedInputs = Object.values(ELEMENTS.MODAL.LOGIN.INPUT);
+                        common.formErrors(errorMessage, errorDisplay, effectedInputs);
+                    }
+                }
+            });
+
         } else {
             common.formErrors(login.errorMsgs, ELEMENTS.MODAL.LOGIN.MSG_DISPLAY, login.errorInputs);
         }

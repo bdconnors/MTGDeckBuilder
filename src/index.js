@@ -28,11 +28,11 @@ const authService = new AuthenticationService(userRepo);
 const userService = new UserService(userRepo);
 const deckService = new DeckService(deckRepo);
 //instantiate controllers
-const home = new HomeController();
 const auth = new AuthenticationController(authService);
+const users = new UserController(userService);
 const decks = new DeckController(deckService);
 const cards = new CardController(cardService);
-const users = new UserController(userService);
+const home = new HomeController(cardService);
 //instantiate server
 const server = new Server(CONFIG.SERVER);
 //register controller routes

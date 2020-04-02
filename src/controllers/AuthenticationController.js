@@ -20,6 +20,11 @@ class AuthenticationController extends Controller{
         const email = req.body.email;
         const password = req.body.password;
         const authenticated = await this.service.authenticate(email,password);
+        if(authenticated){
+            res.status(200);
+        }else{
+            res.status(401);
+        }
         res.send(authenticated);
     }
 }

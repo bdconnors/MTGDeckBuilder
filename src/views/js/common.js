@@ -83,9 +83,6 @@ const common = {
     match: (value1, value2) => {
         return value1 === value2;
     },
-    request: async (url, method, data = {}) => {
-        return await $.ajax({url: url, method: method, data: data});
-    },
     toggleModal: (id, show) => {
         if (show) {
             $(id).modal('show');

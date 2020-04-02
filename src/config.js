@@ -34,7 +34,8 @@ global.CONFIG = {
     },
     ROUTES:{
         HOME:[
-            {method:'get',path:'/',endpoint:'index'}
+            {method:'get',path:'/',endpoint:'index'},
+            {method:'post',path:'/',endpoint:'search'}
         ],
         USERS:[
             {method:'get',path:'/users',endpoint:'index'},
@@ -46,6 +47,7 @@ global.CONFIG = {
         ],
         CARDS:[
             {method:'get',path:'/cards',endpoint:'index'},
+            {method:'post',path:'/cards',endpoint:'query'},
             {method:'get',path:'/cards/:id',endpoint:'cardProfile'}
         ],
         DECKS:[

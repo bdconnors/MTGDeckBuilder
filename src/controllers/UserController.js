@@ -10,8 +10,13 @@ class UserController extends Controller{
     async register(req,res){
         const email = req.body.email;
         const password = req.body.password;
-        const result = await this.service.register(email,password);
-        res.send(result);
+        const success = await this.service.register(email,password);
+        if(success){
+            res.status(200);
+        }else{
+            res.status(500)
+        }
+        res.send(success);
     }
 }
 module.exports = UserController;

@@ -4,8 +4,11 @@ class CardService{
 
     constructor(){}
 
-    async search(values){
+    async query(values){
         return await api.query(values);
+    }
+    async getAllCards(){
+        return await api.getAllCards();
     }
     async getCard(id){
         return await api.getCard(id);
