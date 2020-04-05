@@ -1,17 +1,7 @@
 <div class="body-container mlr-auto" style="text-align:center;">
     <table>
         <tbody>
-        <tr>
-            <th>
-<%
-            const decks = session.user.decks;
-            if(decks.length === 0) {
-%>                  You haven't created a deck yet.
-<%              }
-%>
-            </th>
-        </tr>
-<%
+<%      const decks = session.user.decks;
         const deckCount = decks.length;
         const rows = Math.floor(deckCount/4);
         const hasOrphanDecks = deckCount % 4 !== 0;
