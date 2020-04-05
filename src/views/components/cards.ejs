@@ -3,20 +3,23 @@
         <tbody>
         <tr>
             <th class="txt-center">
-<%              if(cards.length === 0) {
+<%
+                const cards = session.searchResults;
+                console.log(cards);
+                if(cards.length === 0) {
 %>                  No Cards Founds
 <%              }
 %>
             </th>
         </tr>
-<%              const cardCount = cards.length;
-                const rows = Math.floor(cardCount/3);
-                const hasOrphanCards = cardCount % 3 !== 0;
+<%
+                const cardCount = cards.length;
+                const rows = Math.floor(cardCount/4);
+                const hasOrphanCards = cardCount % 4 !== 0;
                 var currentCard = 0;
-                console.log(cards);
                 for(let i = 0; i < rows; i++){
 %>                  <tr>
-<%                      for(let i = 0; i < 3; i++){
+<%                      for(let i = 0; i < 4; i++){
 %>                           <td>
                                 <a class="mx-auto" href="/cards/<%=cards[currentCard].id%>">
                                     <%-include('./card',{card:cards[currentCard]})%>
@@ -35,6 +38,7 @@
                                    <%-include('./card',{card:cards[currentCard]})%>
                                </a>
                            </td>
+                            <%currentCard++;%>
 <%                      }
 %>                  </tr>
 <%

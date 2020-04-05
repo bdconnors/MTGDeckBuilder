@@ -27,11 +27,15 @@
   "dependencies": {
     "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
+    "connect-redis": "^4.0.4",
+    "cookie-parser": "^1.4.5",
     "ejs": "^3.0.1",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "mtgsdk": "^0.4.3",
     "mysql2": "^2.1.0",
+    "redis": "^3.0.2",
+    "redis-server": "^1.2.2",
     "uuid": "^7.0.2",
     "validator": "^13.0.0",
     "xss-filters": "^1.2.7"

@@ -6,7 +6,7 @@ class CardController extends Controller{
     }
     async index(req,res){
         const cards = await this.service.getAllCards();
-        res.render('allCards', {cards: cards});
+        res.render('allCards', {session:req.session,cards: cards});
     }
     async query(req,res){
         let results = [];
@@ -19,7 +19,7 @@ class CardController extends Controller{
     async cardProfile(req,res){
         const id = req.params.id;
         const card = await this.service.getCard(id);
-        res.render('cardProfile',{card:card});
+        res.render('cardProfile',{session:req.session,card:card});
     }
 }
 module.exports = CardController;

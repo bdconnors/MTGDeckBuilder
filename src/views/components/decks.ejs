@@ -1,0 +1,47 @@
+<div class="body-container mlr-auto" style="text-align:center;">
+    <table>
+        <tbody>
+        <tr>
+            <th>
+<%
+            const decks = session.user.decks;
+            if(decks.length === 0) {
+%>                  You haven't created a deck yet.
+<%              }
+%>
+            </th>
+        </tr>
+<%
+        const deckCount = decks.length;
+        const rows = Math.floor(deckCount/4);
+        const hasOrphanDecks = deckCount % 4 !== 0;
+        var currentDeck = 0;
+
+        for(let i = 0; i < rows; i++){
+%>          <tr>
+<%              for(let i = 0; i < 4; i++){
+%>                  <td>
+                        <a class="mx-auto" href="/decks/<%=decks[currentDeck].id%>">
+                            <%=decks[currentDeck].name%>
+                        </a>
+                    </td>
+<%                  currentDeck++;
+                }
+%>          </tr>
+<%              }
+        if(hasOrphanDecks){
+%>
+            <tr>
+<%              for(let i = currentDeck; i < decks.length; i++){
+%>                  <td>
+                        <a class="mx-auto" href="/decks/<%=decks[currentDeck].id%>">
+                            <%=decks[currentDeck].name%>
+                        </a>
+                    </td>
+<%              }
+%>         </tr>
+<%
+        }
+%>      </tbody>
+    </table>
+</div>

@@ -71,7 +71,6 @@ class Repository {
     exists(prop,value){
         let exists = false;
         const results = this.filter(prop,value);
-        console.log(results);
         if(results.length !== 0){
             exists = true;
         }

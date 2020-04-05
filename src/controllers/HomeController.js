@@ -5,19 +5,19 @@ class HomeController extends Controller{
         super(service);
     }
     index(req,res){
-        if(!req.session.user){
-            res.render('search',{results:[-1]});
-        }else{
-            res.render('index',{user:req.session.user});
+        if(!req.session.signedIn) {
+            req.session.signedIn = false;
         }
+        req.session.searchResults = [-1];
+        res.render('index',{session:req.session});
     }
     async search(req,res){
-        let results = [];
-        console.log(req.body.name);
         if(req.body.name) {
-            results = await this.service.query({name:req.body.name});
+            req.session.searchResults = await this.service.query({name:req.body.name});
+        }else{
+            req.session.searchResults = [];
         }
-        res.render('search', {results: results});
+        res.render('index', {session: req.session});
     }
 }
 module.exports = HomeController;
