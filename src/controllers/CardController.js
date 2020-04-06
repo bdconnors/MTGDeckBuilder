@@ -5,21 +5,22 @@ class CardController extends Controller{
         super(service);
     }
     async index(req,res){
-        const cards = await this.service.getAllCards();
-        res.render('allCards', {session:req.session,cards: cards});
-    }
-    async query(req,res){
-        let results = [];
         const params = Object.keys(req.query);
         if(params.length > 0) {
-            results = await this.service.query(req.query);
+            const results = await this.service.query(req.query);
+            res.render('cardsIndex', {session:req.session,cards:results});
+        }else{
+            res.render('cardsIndex', {session:req.session,cards:false});
         }
-        res.send(results);
     }
-    async cardProfile(req,res){
+    async profile(req,res){
         const id = req.params.id;
-        const card = await this.service.getCard(id);
-        res.render('cardProfile',{session:req.session,card:card});
+        const result = await this.service.getCard(id);
+        if(result) {
+            res.render('cardProfile', {session: req.session, card: result});
+        }else{
+            res.send('card not found');
+        }
     }
 }
 module.exports = CardController;

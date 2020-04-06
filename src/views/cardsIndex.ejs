@@ -1,0 +1,5 @@
+<%-include('components/head',{title:'MTG Deck Builder|Home'})%>
+<%-include('components/navigation',{session:session})%>
+<%-include('components/searchBar')%>
+<%-include('components/cards',{session:session,cards:cards})%>
+<%-include('components/foot',{scripts:['search','navigation'],styles:['search','navigation']})%>

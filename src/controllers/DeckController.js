@@ -5,7 +5,11 @@ class DeckController extends Controller{
         super(service);
     }
     index(req,res){
-        res.send('Decks Page');
+        if(!req.session.signedIn){
+            res.redirect('/cards');
+        }else{
+            res.render('decksIndex',{session:req.session});
+        }
     }
     async newDeck(req,res){
         try{

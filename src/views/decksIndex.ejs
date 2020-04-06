@@ -1,0 +1,12 @@
+<%-include('components/head',{title:'MTG Deck Builder|Home'})%>
+<%-include('components/navigation',{session:session})%>
+<div class="body-container" style="text-align:center;">
+    <h1>My Decks</h1>
+<%if(session.user.decks.length === 0) {%>
+    <p>
+        <b>You haven't created any decks</b>
+    </p>
+<%}%>
+</div>
+<%-include('components/decks',{session:session})%>
+<%-include('components/foot',{scripts:[],styles:['navigation']})%>
