@@ -1,6 +1,7 @@
 const uuid = require('uuid');
 
 global.CONFIG = {
+
     SERVER:{
         HOST:'localhost',
         PORT:'3000',
@@ -9,15 +10,14 @@ global.CONFIG = {
             DIR:'views'
         },
         SESSION:{
-            genid: (req)=>{
-                return uuid.v4();
-            },
+            genid: (req) => { return uuid.v4(); },
             secret:'eb1d1a6a-cd33-45cc-9843-7fa31eae7269',
-            resave:false,
+            resave: false,
             saveUninitialized: true,
-            name: 'session',
+            name: '_mtgdeckbuilder',
+            secure:false,
             rolling: true,
-            cookie: { secure:true,maxAge: 3600000 }
+            cookie: {maxAge: 3600000 }
         }
     },
     DB:{
@@ -34,7 +34,8 @@ global.CONFIG = {
     },
     ROUTES:{
         HOME:[
-            {method:'get',path:'/',endpoint:'index'}
+            {method:'get',path:'/',endpoint:'index'},
+            {method:'post',path:'/',endpoint:'search'}
         ],
         USERS:[
             {method:'get',path:'/users',endpoint:'index'},
@@ -42,10 +43,12 @@ global.CONFIG = {
         ],
         AUTH:[
             {method:'post',path:'/login',endpoint:'login'},
+            {method:'post',path:'/logout',endpoint:'logout'},
             {method:'post',path:'/verify',endpoint:'verify'}
         ],
         CARDS:[
             {method:'get',path:'/cards',endpoint:'index'},
+            {method:'post',path:'/cards',endpoint:'query'},
             {method:'get',path:'/cards/:id',endpoint:'cardProfile'}
         ],
         DECKS:[

@@ -10,17 +10,24 @@ class DeckController extends Controller{
     async newDeck(req,res){
         try{
             const result = await this.service.newDeck(req.body.id,req.body.name);
+            res.status(200);
             res.send(result);
         }catch (e) {
-            res.send(e);
+            res.status(500);
+            res.send(`<h1>500 Internal Server Error</h1>`);
         }
     }
     async addCard(req,res){
-        const deckId = req.params.id;
-        const cardId = req.body.cardId;
-        const copies = req.body.copies;
-        const result = await this.service.addToDeck(deckId,cardId,copies);
-        res.send(result);
+        try {
+            const deckId = req.params.id;
+            const cardId = req.body.cardId;
+            const copies = req.body.copies;
+            const result = await this.service.addToDeck(deckId, cardId, copies);
+            res.send(result);
+        }catch (e) {
+            res.status(500);
+            res.send(`<h1>500 Internal Server Error</h1>`);
+        }
     }
 }
 module.exports = DeckController;

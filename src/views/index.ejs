@@ -1,4 +1,29 @@
 <%-include('components/head',{title:'MTG Deck Builder|Home'})%>
-<%-include('components/navigation')%>
-<%-include('components/search',{results:results})%>
-<%-include('components/foot',{scripts:['search','navigation'],styles:['search','navigation']})%>
+<%-include('components/navigation',{session:session})%>
+<%if(session.signedIn){%>
+    <div class="body-container" style="text-align:center;">
+        <h1>My Decks</h1>
+<%      if(session.user.decks.length === 0) {
+%>          <p>
+                <b>You haven't created any decks</b>
+            </p>
+<%      }
+%>
+    </div>
+    <%-include('components/decks',{session:session})%>
+<%}else{ %>
+    <%-include('components/searchBar')%>
+    <%-include('components/cards',{session:session})%>
+<%}%>
+<%
+    var scripts;
+    var styles;
+    if(session.signedIn){
+        scripts = [];
+        styles = ['navigation']
+    }else{
+        scripts = ['search','navigation'];
+        styles = ['search','navigation'];
+    }
+ %>
+<%-include('components/foot',{scripts:scripts,styles:styles})%>

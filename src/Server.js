@@ -2,13 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
 class Server {
     constructor(config){
         this.config = config;
         this.instance = express();
         this.router = express.Router();
-
     }
     /**
      * @controller an implementation of the Controller class
@@ -27,6 +27,7 @@ class Server {
      * Starts the server, listening on the host and port specified in the config file
      * **/
     start(){
+        this.instance.use(cookieParser());
         this.instance.use(session(this.config.SESSION));
         this.instance.use(express.urlencoded({extended: false}));
         this.instance.use(bodyParser.json());
