@@ -5,7 +5,7 @@ class DeckController extends Controller{
         super(service);
     }
     index(req,res){
-        if(!req.session.signedIn){
+        if(!req.session.user){
             res.redirect('/cards');
         }else{
             res.render('decksIndex',{session:req.session});
