@@ -30,26 +30,21 @@ global.CONFIG = {
         SALT: 10
     },
     PROXY:{
-        GAME_FORMAT:'standard'
+        BASE_QUERY:{gameFormat:'standard'}
     },
     ROUTES:{
         HOME:[
             {method:'get',path:'/',endpoint:'index'},
-            {method:'post',path:'/',endpoint:'search'}
-        ],
-        USERS:[
-            {method:'get',path:'/users',endpoint:'index'},
-            {method:'post',path:'/register',endpoint:'register'}
         ],
         AUTH:[
             {method:'post',path:'/login',endpoint:'login'},
             {method:'post',path:'/logout',endpoint:'logout'},
+            {method:'post',path:'/register',endpoint:'register'},
             {method:'post',path:'/verify',endpoint:'verify'}
         ],
         CARDS:[
             {method:'get',path:'/cards',endpoint:'index'},
-            {method:'post',path:'/cards',endpoint:'query'},
-            {method:'get',path:'/cards/:id',endpoint:'cardProfile'}
+            {method:'get',path:'/cards/:id',endpoint:'profile'},
         ],
         DECKS:[
             {method:'get',path:'/decks',endpoint:'index'},

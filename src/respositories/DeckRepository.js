@@ -1,7 +1,7 @@
 const Repository = require('./Repository.js');
 const Deck = require('../models/Deck');
 const queryBuilder = require('../util/QueryBuilder');
-const api = require('../util/ApiProxy');
+const api = require('../core/Proxy');
 
 class DeckRepository extends Repository{
 

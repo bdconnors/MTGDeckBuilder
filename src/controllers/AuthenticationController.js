@@ -11,16 +11,14 @@ class AuthenticationController extends Controller{
         const authenticated = await this.service.authenticate(email,password);
         if(authenticated){
             req.session.user = this.service.getUser(email);
-            req.session.signedIn = true;
-            res.redirect('/');
+            res.redirect('/decks');
         }else{
-            req.session.signedIn = false;
-            res.redirect('/');
+            res.redirect('/cards');
         }
     }
     async logout(req,res){
         await req.session.destroy();
-        res.redirect('/');
+        res.redirect('/cards');
     }
     async verify(req,res){
         const email = req.body.email;
@@ -32,6 +30,17 @@ class AuthenticationController extends Controller{
             res.status(401);
         }
         res.send(authenticated);
+    }
+    async register(req,res){
+        const email = req.body.email;
+        const password = req.body.password;
+        const success = await this.service.register(email,password);
+        if(success){
+            res.status(200);
+        }else{
+            res.status(500)
+        }
+        res.send(success);
     }
 }
 module.exports = AuthenticationController;
