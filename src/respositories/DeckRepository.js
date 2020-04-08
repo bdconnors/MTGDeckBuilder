@@ -13,6 +13,7 @@ class DeckRepository extends Repository{
             deck.cards = await this.getCards(deck.id);
             return await this.make(deck);
         }catch (e) {
+            console.log(e);
             throw new Error(e);
         }
     }

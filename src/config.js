@@ -48,8 +48,8 @@ global.CONFIG = {
         ],
         DECKS:[
             {method:'get',path:'/decks',endpoint:'index'},
+            {method:'get',path:'/decks/:id',endpoint:'deckProfile'},
             {method:'post',path:'/decks',endpoint:'newDeck'},
-            {method:'post',path:'/decks/:id',endpoint:'addCard'}
         ]
     }
 
