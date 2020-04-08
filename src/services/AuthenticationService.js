@@ -1,26 +1,41 @@
 const encryption = require('../util/Encryption');
 const validation = require('../util/Validation');
+const Service = require('./Service');
 
-
-class AuthenticationService{
+class AuthenticationService extends Service{
     constructor(repo){
-        this.repo = repo;
+        super(repo);
     }
-    getUser(email){
-        return this.repo.getByEmail(email);
+    async getUser(email){
+        try {
+            return await this.repo.getByEmail(email);
+        }catch(e){
+            throw new Error('account not found');
+        }
     }
     async authenticate(email,password){
         email = email.toLowerCase();
-        let authentic = validation.validCredentials(email,password);
-        if(authentic){
-            authentic = this.repo.exists('email',email);
-            if (authentic) {
-                const user = this.getUser(email);
-                const hash = user.getPassword();
-                authentic = validation.validLogin(password,hash);
-            }
+        try {
+            this.validateValues(email,password);
+            const user = await this.getUser(email);
+            const hash = user.getPassword();
+            this.validateLogin(password,hash);
+            return user;
+        }catch (e) {
+            throw new Error('Bad E-mail or Password');
         }
-        return authentic;
+    }
+    validateValues(email,password){
+        const validCredentials = validation.validCredentials(email,password);
+        if(!validCredentials){
+            throw new Error('Invalid Credentials');
+        }
+    }
+    validateLogin(password,hash){
+        const validPass = validation.validLogin(password, hash);
+        if(!validPass){
+            throw new Error('Bad Password');
+        }
     }
     async register(email,password){
         let registered = false;

@@ -8,20 +8,41 @@ class Database {
     async connect(){
         this.conn = await mysql.createConnection(this.config);
     }
-    /**
-     * @statement prepared statement or stored procedure call string
-     * @params the values to be prepared with the statement
-     *
-     * queries the database connection returning the results
-     * in an array
-     * **/
-    async execute(statement,params){
-        return await new Promise((resolve,reject)=>{
-            this.conn.execute(statement,params,(err,res,fields)=>{
+    async execute(method, name, values){
+        console.log(method,name,values);
+        return new Promise((resolve,reject)=>{
+            const procedure = this.getProcedure(method,name,values);
+            const params = this.getParams(values);
+            console.log(params);
+            this.conn.execute(procedure,params,(err,res,fields)=>{
                 if(err){reject(err);}
                 resolve(res);
             });
         });
     }
+    getProcedure(method, name, values){
+        let columnCount = this.getColumns(values).length;
+        let query = `CALL ${method}_${name}(`;
+        for (let i = 0; i < columnCount; i++) {
+            const lastColumn = i === columnCount - 1;
+            query += `?`;
+            if (!lastColumn) {
+                query += `,`;
+            }
+        }
+        query += `)`;
+        return query;
+    }
+    getParams(values){
+        const params = [];
+        const keys = Object.keys(values);
+        for (let i = 0; i < keys.length; i++) {
+            params.push(values[keys[i]]);
+        }
+        return params;
+    };
+    getColumns(values){
+        return Object.keys(values);
+    };
 }
 module.exports = Database;

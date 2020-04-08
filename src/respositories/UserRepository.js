@@ -6,14 +6,16 @@ class UserRepository extends Repository{
     constructor(database){
         super('user',database);
     }
-    getByEmail(email){
-        let result = false;
-        if(this.exists('email',email)) {
-            result = this.filter('email', email)[0];
+    async getByEmail(email) {
+        try {
+            const result = await this.database.execute('RETRIEVE', 'USER_BY_EMAIL', {email: email});
+            const data = result[0][0];
+            return this.make(data);
+        }catch (e) {
+            throw new Error(e);
         }
-        return result;
     }
-    make(data){
+    async make(data){
         return new User(data.id,data.email,data.password);
     }
 

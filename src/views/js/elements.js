@@ -11,6 +11,17 @@ const ELEMENTS = {
             ID:'#logOutShow'
         },
         MODAL: {
+            NEW_DECK:{
+                ID:'#newDeckModal',
+                MSG_DISPLAY: '#newDeckMsg',
+                TOGGLE_BTN: '#newDeckShow',
+                SUBMIT_BTN: '#newDeckSubmit',
+                CLOSE_BTN: '#newDeckClose',
+                FORM: '#newDeckForm',
+                INPUT: {
+                    NAME: '#newDeckName'
+                }
+            },
             LOGIN: {
                 ID: '#loginModal',
                 MSG_DISPLAY: '#loginMsg',

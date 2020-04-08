@@ -38,7 +38,7 @@ const common = {
         submitBtn.on('click', action);
 
         closeBtn.on('click', () => {
-            common.resetForm(config.FORM, config.ERROR_DISPLAY, Object.values(config.INPUT));
+            common.resetForm(config.FORM, config.MSG_DISPLAY, Object.values(config.INPUT));
         });
 
         toggleBtn.on('click', () => {
