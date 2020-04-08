@@ -4,21 +4,26 @@ class DeckController extends Controller{
     constructor(service){
         super(service);
     }
-    index(req,res){
+    async index(req,res){
         if(!req.session.user){
-            res.redirect('/cards');
+            return res.redirect('/cards');
         }else{
-            res.render('decksIndex',{session:req.session});
+            const userId = req.session.user.id;
+            console.log(req.session.user);
+            console.log(req.session.user.id);
+            const decks = await this.service.getUserDecks(userId);
+            return res.render('decksIndex',{session:req.session,decks:decks});
         }
     }
     async newDeck(req,res){
         try{
-            const result = await this.service.newDeck(req.body.id,req.body.name);
-            res.status(200);
-            res.send(result);
+            const userId = req.session.user.id;
+            const result = await this.service.newDeck(userId,req.body.name);
+            console.log(this.service.repo.entities);
+            return res.redirect('/decks');
         }catch (e) {
             res.status(500);
-            res.send(`<h1>500 Internal Server Error</h1>`);
+            return res.send(`<h1>500 Internal Server Error</h1>`);
         }
     }
     async addCard(req,res){

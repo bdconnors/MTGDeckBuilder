@@ -1,68 +1,69 @@
 const mtg = require('mtgsdk');
-const Card = require('../models/Card');
-
 class Proxy{
     constructor(config){
         this.config = config;
     }
     async getAll(){
-        return await this.search({});
+        try {
+            return await this.search({});
+        }catch (e) {
+            throw new Error(e);
+        }
     }
     async get(id){
-        return await this.search({multiverseid:id});
+        try {
+            return await this.search({multiverseid: id});
+        }catch (e) {
+            throw new Error(e);
+        }
     }
     async search(query){
-        const results = await this.apiQuery(query);
-        return this.processResults(results);
+        try {
+            const results = await this.apiQuery(query);
+            return this.processResults(results);
+        }catch (e) {
+            throw new Error(e);
+        }
     }
     processResults(results){
-        const data = [];
-        results.forEach((queryResult)=>{
-            if(!this.alreadyExists(queryResult.name,data)) {
-                if (this.hasMultipleVersions(queryResult.name, results)) {
-                    const imageVersion = this.getVersionWithImage(queryResult.name, results);
-                    data.push(imageVersion);
-                } else {
-                    data.push(queryResult);
+        try {
+            const data = [];
+            results.forEach((queryResult) => {
+                if (!this.alreadyExists(queryResult.name, data)) {
+                    if (this.hasMultipleVersions(queryResult.name, results)) {
+                        const imageVersion = this.getVersionWithImage(queryResult.name, results);
+                        data.push(imageVersion);
+                    } else {
+                        data.push(queryResult);
+                    }
                 }
-            }
-        });
-        return this.makeCards(data);
+            });
+            return data;
+        }catch (e) {
+            throw new Error(e);
+        }
     }
     async apiQuery(query){
         return new Promise((res,rej)=>{
+            let count = 0;
             let cards = [];
             let apiQuery = {...this.config.BASE_QUERY,...query};
             mtg.card.all(apiQuery).on('data',(data)=>{
-                cards.push(data);
+                const isBasic = data.supertypes.includes('Basic');
+                const isLand = data.types.includes('Land');
+                if(!isBasic && !isLand) {
+                    cards.push(data);
+                    count++;
+                    console.log('loading card # ' + count);
+                }
             });
             mtg.card.all(apiQuery).on('end',()=>{
                 res(cards);
             });
+            mtg.card.all(apiQuery).on('error',(e)=>{
+                throw new Error(e);
+            });
         });
-    }
-    makeCards(data){
-        const cards = [];
-        for(let i = 0; i < data.length; i++){
-            const rawCard = data[i];
-            const card = this.makeCard(rawCard);
-            cards.push(card);
-        }
-        return cards;
-    }
-    makeCard(values){
-        return new Card(values.multiverseid,
-            values.name,
-            values.manaCost,
-            values.cmc,
-            values.setName,
-            values.types,
-            values.supertypes,
-            values.subtypes,
-            values.colors,
-            values.rarity,
-            values.text,
-            values.imageUrl);
     }
     hasMultipleVersions(name,results){
         let hasMultiple = false;

@@ -1,13 +1,13 @@
 <div class="body-container mlr-auto" style="text-align:center;">
     <table>
         <tbody>
-<%      const decks = session.user.decks;
-        const deckCount = decks.length;
+<%      const deckCount = decks.length;
         const rows = Math.floor(deckCount/4);
         const hasOrphanDecks = deckCount % 4 !== 0;
         var currentDeck = 0;
 
         for(let i = 0; i < rows; i++){
+            console.log(decks[currentDeck]);
 %>          <tr>
 <%              for(let i = 0; i < 4; i++){
 %>                  <td>

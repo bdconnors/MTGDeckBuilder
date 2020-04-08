@@ -1,42 +1,53 @@
 const Repository = require('./Repository.js');
 const Deck = require('../models/Deck');
-const queryBuilder = require('../util/QueryBuilder');
-const api = require('../core/Proxy');
 
 class DeckRepository extends Repository{
 
-    constructor(database){
+    constructor(database,cards){
         super('deck',database);
+        this.cards = cards;
     }
-    async load(){
-        await super.load();
-        const query = queryBuilder.storedProcedure('RETRIEVE','ALL_DECK_CARD',[]);
-        const results = await this.database.execute(query,[]);
-        const cardResults = results[0];
-        for(let i = 0; i < this.entities.length; i++){
-            const deck = this.entities[i];
-            const cards = cardResults.filter((card)=>{return card.deck === deck.id});
-            await this.loadDeck(deck,cards);
+    async retrieve(values){
+        try {
+            const deck = await super.retrieve(values);
+            deck.cards = await this.getCards(deck.id);
+            return await this.make(deck);
+        }catch (e) {
+            throw new Error(e);
         }
     }
-    async createDeckCard(id,cardId,copies){
-        const query = queryBuilder.storedProcedure('deck_card',{deck:id,card:id});
-        await this.database.execute(query,[id,cardId]);
-        const deck = this.retrieve(id)[0];
-        const card = await api.getCard(id);
-        deck.addCard(card,copies);
-        return deck;
-    }
-    async loadDeck(deck,rows){
-        for(let i = 0; i < rows.length; i++) {
-            const row = rows[i];
-            const id = row.id;
-            const card = await api.getCard(id);
-            deck.addCard(card,row.copies);
+    async getCards(id){
+        try {
+            return await this.cards.getDeckCards(id);
+        }catch (e) {
+            throw new Error(e);
         }
     }
-    make(data){
-        return new Deck(data.id,data.name);
+    async getUserDecks(userId){
+        try {
+            const results = await this.database.execute('RETRIEVE', 'ALL_USER_DECK', {user: userId});
+            const decks = results[0];
+            console.log(decks);
+            return await this.makeMany(decks);
+        }catch (e) {
+            throw new Error(e);
+        }
+    }
+    async addCard(deckId,cardId,copies){
+        try{
+            await this.cards.create({deck:deckId,card:cardId,copies:copies});
+            return await this.retrieve({id:deckId});
+        }catch (e) {
+            throw new Error(e);
+        }
+    }
+    async make(data){
+        try {
+            const cards = await this.getCards(data.id);
+            return new Deck(data.id, data.user, data.name, cards);
+        }catch (e) {
+            throw new Error(e);
+        }
     }
 }
 module.exports = DeckRepository;

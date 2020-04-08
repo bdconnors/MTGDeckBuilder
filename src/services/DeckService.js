@@ -1,19 +1,19 @@
-class DeckService{
+const validation = require('../util/validation');
+const Service = require('./Service');
+class DeckService extends Service{
 
     constructor(repo){
-        this.repo = repo;
+        super(repo);
     }
 
     async newDeck(userId,deckName){
         try {
-            const valid = this.validateNew(userId,deckName);
-            if(valid) {
-                return await this.repo.create({user: userId, name: deckName});
-            }else{
-                return false;
-            }
+            const id = userId.toString();
+            this.validateNewDeck(id,deckName);
+            return await this.repo.create({user: id, name: deckName});
+
         }catch (e) {
-            console.log(e);
+            throw new Error(e);
         }
     }
     async addToDeck(deckId,cardId,copies){
@@ -24,20 +24,21 @@ class DeckService{
             return false;
         }
     }
-    async getDeck(id){
-
+    async getUserDecks(userId){
+        return await this.repo.getUserDecks(userId);
     }
-
+    validateNewDeck(id,name){
+        const valid = validation.validAddDeck(id,name);
+        if(!valid){
+            throw new Error('invalid user id or deck name');
+        }
+    }
     validateAdd(deckId,cardId,copies){
         const validDeckId = validation.isInt(deckId);
         const validCardId = validation.isInt(cardId);
         const validCopies = validation.isInt(copies);
         return validDeckId && validCardId && validCopies;
     }
-    validateNew(userId,deckName){
-        const validUserId = validation.isInt(userId);
-        const validDeckName = validation.isAlphanumeric(deckName);
-        return validUserId && validDeckName;
-    }
+
 }
 module.exports = DeckService;

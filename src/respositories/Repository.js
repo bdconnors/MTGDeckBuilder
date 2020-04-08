@@ -1,82 +1,74 @@
-const queryBuilder = require('../util/QueryBuilder');
 class Repository {
 
     constructor(table,database){
         this.table = table;
         this.database = database;
-        this.entities = [];
     }
-    all(){
-        return this.entities;
-    }
-    filter(prop,value){
-        return this.entities.filter((entity)=>{
-            return entity[prop] === value
-        });
-    }
-    async load(){
-        const query = queryBuilder.retrieve(this.table);
-        const results = await this.database.execute(query,[]);
-        for(let i = 0; i < results.length; i++){
-            const row = results[i];
-            const entity = this.make(row);
-            this.entities.push(entity);
+    async all(){
+        try {
+            const procedureName = 'ALL_' + this.table;
+            const result = await this.database('RETRIEVE', procedureName, {});
+            const data = result[0];
+            return await this.makeMany(data);
+        }catch (e) {
+            throw new Error(e)
         }
     }
     async create(values){
         try {
-            const query = queryBuilder.storedProcedure('CREATE',this.table, values);
-            const params = queryBuilder.getParams(values);
-            values.id = await this.database.execute(query, params)[0];
-            const entity = this.make(values);
-            this.entities.push(entity);
-            return entity;
+            const result = await this.database.execute('CREATE',this.table,values);
+            values.id = result[0][0].id;
+            return await this.make(values);
         }catch (e) {
-            console.log(e);
+            throw new Error(e)
         }
     }
-    retrieve(id){
-        return this.entities.find((entity)=>{
-            return entity.id === id
-        });
-    }
-    async update(id,values){
-        try{
-            const query = queryBuilder.updateOne(this.table,id,'id',values);
-            const params = queryBuilder.getParams(values);
-            await this.database.execute(query,params);
-            const entity = this.retrieve(id);
-            const keys = Object.keys(values);
-            keys.forEach((key)=>{
-                entity[key] = values[key];
-            });
-            return entity
-        }catch (e) {
-            console.log(e);
-        }
-    }
-    async delete(id){
+    async retrieve(values){
         try {
-            const query = queryBuilder.delete(this.table,'id');
-            await this.database.execute(query, [id]);
-            for (let i = 0; i < this.entities.length; i++) {
-                if (this.entities[i] === id) {
-                    return this.entities.splice(i, 1);
-                }
-            }
+            const result = await this.database.execute('RETRIEVE',this.table,values);
+            const data = result[0][0];
+            return await this.make(data);
         }catch (e) {
-            console.log(e);
+           throw new Error(e);
         }
     }
-    exists(prop,value){
-        let exists = false;
-        const results = this.filter(prop,value);
-        if(results.length !== 0){
-            exists = true;
+    async update(values){
+        try{
+            let success = false;
+            const result = await this.database.execute('UPDATE',this.table,values);
+            const effected = result[0][0];
+            if(effected > 1){
+                success = await this.retrieve(id);
+            }
+            return success;
+
+        }catch (e) {
+            throw new Error(e);
         }
-        return exists;
     }
-    make(data){
+    async delete(values){
+        try {
+            let success = false;
+            const result = await this.database.execute('DELETE',this.table,values);
+            const effected = result[0][0];
+            if(effected > 1){
+                success = true;
+            }
+            return success;
+        }catch (e) {
+            throw new Error(e);
+        }
+    }
+    async makeMany(data){
+        console.log(data);
+        const results = [];
+        for(let i = 0; i < data.length; i++){
+            const entity = await this.make(data[i]);
+            results.push(entity);
+        }
+        return results;
+    }
+    async make(data){
         throw new Error('Please override make function from parent class Repository');
     }
 

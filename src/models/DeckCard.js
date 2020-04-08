@@ -1,4 +1,4 @@
-class DeckCard{
+class Card{
     constructor(deck,card,copies = 1){
         this.deck = deck;
         this.card = card;
@@ -11,4 +11,4 @@ class DeckCard{
         this.copies-=amount;
     }
 }
-module.exports = DeckCard;
+module.exports = Card;

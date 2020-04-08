@@ -1,19 +1,15 @@
-const api = require('../core/Proxy');
+const Service = require('./Service');
+class CardService extends Service{
 
-class CardService{
-
-    constructor(proxy){
-        this.proxy = proxy;
+    constructor(repo){
+        super(repo);
     }
     async query(values){
-        return await this.proxy.search(values);
-    }
-    async getAllCards(){
-        return await this.proxy.getAll();
+        return await this.repo.searchCards(values);
     }
     async getCard(id){
         let card = false;
-        const results = await this.proxy.get(id);
+        const results = await this.repo.getCard(id);
         if(results.length !== 0){
             card = results[0];
         }

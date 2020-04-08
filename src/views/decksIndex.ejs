@@ -1,12 +1,23 @@
-<%-include('components/head',{title:'MTG Deck Builder|Home'})%>
-<%-include('components/navigation',{session:session})%>
+<%-include('./components/head',{title:'MTG Deck Builder|Home'})%>
+<%-include('./components/navigation',{session:session})%>
+<%-include('./components/modal/newDeck')%>
 <div class="body-container" style="text-align:center;">
+    <%-include('./components/form/button',{
+    id:"newDeckShow",
+    type:"button",
+    cssClass:["btn","btn-secondary"],
+    label:"New Deck",
+    icon:"plus"
+    });%>
     <h1>My Decks</h1>
-<%if(session.user.decks.length === 0) {%>
+</div>
+<%if(decks.length === 0) {%>
+<div class="body-container" style="text-align:center;">
     <p>
         <b>You haven't created any decks</b>
     </p>
-<%}%>
 </div>
-<%-include('components/decks',{session:session})%>
-<%-include('components/foot',{scripts:[],styles:['navigation']})%>
+<%}else{%>
+    <%-include('./components/decks',{decks:decks})%>
+<%}%>
+<%-include('./components/foot',{scripts:['decks'],styles:['navigation']})%>

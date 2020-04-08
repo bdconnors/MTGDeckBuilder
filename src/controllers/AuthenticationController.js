@@ -6,13 +6,14 @@ class AuthenticationController extends Controller{
     }
     //POST
     async login(req,res){
-        const email = req.body.email;
-        const password = req.body.password;
-        const authenticated = await this.service.authenticate(email,password);
-        if(authenticated){
-            req.session.user = this.service.getUser(email);
+        try {
+            const email = req.body.email;
+            const password = req.body.password;
+            await await this.service.authenticate(email, password);
+            req.session.user = await this.service.getUser(email);
+            console.log(req.session.user);
             res.redirect('/decks');
-        }else{
+        }catch (e) {
             res.redirect('/cards');
         }
     }
@@ -21,15 +22,16 @@ class AuthenticationController extends Controller{
         res.redirect('/cards');
     }
     async verify(req,res){
-        const email = req.body.email;
-        const password = req.body.password;
-        const authenticated = await this.service.authenticate(email,password);
-        if(authenticated){
+        try {
+            const email = req.body.email;
+            const password = req.body.password;
+            await this.service.authenticate(email, password);
             res.status(200);
-        }else{
+            res.send();
+        }catch (e) {
             res.status(401);
+            res.send();
         }
-        res.send(authenticated);
     }
     async register(req,res){
         const email = req.body.email;

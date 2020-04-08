@@ -1,10 +1,9 @@
 class User {
     #password;
-    constructor(id,email,password,decks = []){
+    constructor(id,email,password){
         this.id = id;
         this.email = email;
         this.#password = password;
-        this.decks = decks;
     }
     getPassword(){
         return this.#password;

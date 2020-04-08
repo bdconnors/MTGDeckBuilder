@@ -1,0 +1,34 @@
+<div class="modal fade" id="newDeckModal" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h4 class="modal-title text-center w-100">
+                    New Deck
+                    <%-include('./close',{id:"newDeckClose"})%>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-column text-left">
+                    <div id="newDeckMsg" class="row" ></div>
+                    <form id="newDeckForm" method="POST" action="/decks" onsubmit = "return decks.createNewDeck()">
+                        <%-include('../form/text',{
+                            id:"newDeckName",
+                            name:"name",
+                            type:"text",
+                            label:"Deck Name:",
+                            placeholder:"Enter a deck name"
+                        });
+                        %>
+                        <%-include('../form/button',{
+                            id:"newDeckSubmit",
+                            type:"submit",
+                            cssClass:["btn","btn-secondary","btn-block"],
+                            label:"Submit",
+                            icon:"power-off"
+                        });%>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
