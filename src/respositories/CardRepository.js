@@ -24,7 +24,7 @@ class CardRepository extends Repository{
             throw new Error(e);
         }
     }
-    makeManyCards(data){
+    async makeManyCards(data){
         const cards = [];
         for(let i = 0; i < data.length; i++){
             const rawCard = data[i];
@@ -33,7 +33,7 @@ class CardRepository extends Repository{
         }
         return cards;
     }
-    makeCard(data){
+    async makeCard(data){
         return new Card(data.multiverseid,
             data.name,
             data.manaCost,
@@ -48,8 +48,9 @@ class CardRepository extends Repository{
             data.imageUrl);
     }
     async make(data){
-        const cardData = await this.proxy.get(data.card);
-        const card = this.makeCard(cardData);
+        const result = await this.proxy.get(data.card);
+        const cardData = result[0];
+        const card = await this.makeCard(cardData);
         return new DeckCard(data.deck,card,data.copies);
     }
 }

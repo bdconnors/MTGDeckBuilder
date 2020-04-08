@@ -26,14 +26,13 @@ class DeckController extends Controller{
             return res.send(`<h1>500 Internal Server Error</h1>`);
         }
     }
-    async addCard(req,res){
+    async deckProfile(req,res){
         try {
             const deckId = req.params.id;
-            const cardId = req.body.cardId;
-            const copies = req.body.copies;
-            const result = await this.service.addToDeck(deckId, cardId, copies);
-            res.send(result);
+            const deck = await this.service.getDeck(deckId);
+            res.render('deckProfile',{session:req.session,deck:deck});
         }catch (e) {
+            console.log(e);
             res.status(500);
             res.send(`<h1>500 Internal Server Error</h1>`);
         }

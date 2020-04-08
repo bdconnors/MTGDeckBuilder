@@ -6,6 +6,13 @@ class DeckService extends Service{
         super(repo);
     }
 
+    async getDeck(deckId){
+        try{
+            return await this.repo.retrieve({id:deckId});
+        }catch (e) {
+            throw new Error('deck not found');
+        }
+    }
     async newDeck(userId,deckName){
         try {
             const id = userId.toString();

@@ -1,0 +1,7 @@
+<%-include('./components/head',{title:'MTG Deck Builder|Home'})%>
+<%-include('./components/navigation',{session:session})%>
+<%-include('./components/deckContents',{cards:deck.cards})%>
+<div class="body-container">
+    <h1><%=deck.name%></h1>
+</div>
+<%-include('./components/foot',{scripts:['navigation','deck'],styles:['navigation','deck']})%>

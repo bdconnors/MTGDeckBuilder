@@ -1,18 +1,18 @@
 <div class="body-container mlr-auto" style="text-align:center;">
     <table>
         <tbody>
-<%      const deckCount = decks.length;
+<%      const deckCount = deck.length;
         const rows = Math.floor(deckCount/4);
         const hasOrphanDecks = deckCount % 4 !== 0;
         var currentDeck = 0;
 
         for(let i = 0; i < rows; i++){
-            console.log(decks[currentDeck]);
+            console.log(deck[currentDeck]);
 %>          <tr>
 <%              for(let i = 0; i < 4; i++){
 %>                  <td>
-                        <a class="mx-auto" href="/decks/<%=decks[currentDeck].id%>">
-                            <%=decks[currentDeck].name%>
+                        <a class="mx-auto" href="/deck/<%=deck[currentDeck].id%>">
+                            <%=deck[currentDeck].name%>
                         </a>
                     </td>
 <%                  currentDeck++;
@@ -22,10 +22,10 @@
         if(hasOrphanDecks){
 %>
             <tr>
-<%              for(let i = currentDeck; i < decks.length; i++){
+<%              for(let i = currentDeck; i < deck.length; i++){
 %>                  <td>
-                        <a class="mx-auto" href="/decks/<%=decks[currentDeck].id%>">
-                            <%=decks[currentDeck].name%>
+                        <a class="mx-auto" href="/deck/<%=deck[currentDeck].id%>">
+                            <%=deck[currentDeck].name%>
                         </a>
                     </td>
 <%              }

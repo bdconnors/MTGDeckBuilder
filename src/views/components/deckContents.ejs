@@ -1,0 +1,23 @@
+<div class="row">
+    <%for(let i = 0; i < cards.length; i++){%>
+        <div class="column col-xs-9" id="sidebar">
+            <%console.log(cards[i])%>
+            <h3><%=cards[i].card.name%> x <%=cards[i].copies%></h3>
+            <%-include('./card',{card:cards[i].card})%>
+            <%-include('./form/button',{
+            id:"addCopy"+cards[i].card.id,
+                type:"button",
+                cssClass:["btn","btn-success"],
+                label:"Add Copy",
+                icon:"plus"
+            });%>
+            <%-include('./form/button',{
+                id:"removeCopy"+cards[i].card.id,
+                type:"button",
+                cssClass:["btn","btn-danger"],
+                label:"Remove Copy",
+                icon:"minus"
+            });%>
+        </div>
+    <%}%>
+</div>
