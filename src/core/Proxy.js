@@ -8,7 +8,11 @@ class Proxy{
         try {
             const query = CONFIG.PROXY.SEARCH_BASE;
             const response = await this.api(query);
-            return response.data;
+            if(response.data.object === 'list') {
+                return response.data.data;
+            }else{
+                return [];
+            }
         }catch (e) {
             return [];
         }
@@ -27,6 +31,8 @@ class Proxy{
             const response = await this.api(query);
             if(response.data.object === 'list') {
                 return response.data.data;
+            }else{
+                return [];
             }
         } catch(e){
             return [];

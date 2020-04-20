@@ -6,7 +6,7 @@ class CardController extends Controller{
     }
     async index(req,res){
         const cards = await this.service.getAllCards();
-        res.render('index',{session:req.session,cards:cards});
+        res.render('cardsIndex',{session:req.session,cards:cards});
     }
     async profile(req,res){
         const id = req.params.id;
