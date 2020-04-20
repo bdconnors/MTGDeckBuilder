@@ -30,7 +30,12 @@ global.CONFIG = {
         SALT: 10
     },
     PROXY:{
-        BASE_QUERY:{gameFormat:'standard'}
+        BASE:"https://api.scryfall.com/cards/",
+        SEARCH_BASE:"search?order=name&pretty=true&unique=cards&q=legal%3Astandard",
+        PARAM:{
+            NAME:"name%3A"
+        }
+
     },
     ROUTES:{
         HOME:[
@@ -49,7 +54,7 @@ global.CONFIG = {
         DECKS:[
             {method:'get',path:'/decks',endpoint:'index'},
             {method:'get',path:'/decks/:id',endpoint:'deckProfile'},
-            {method:'post',path:'/decks',endpoint:'newDeck'},
+            {method:'post',path:'/decks',endpoint:'newDeck'}
         ]
     }
 

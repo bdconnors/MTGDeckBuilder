@@ -7,13 +7,15 @@ class CardRepository extends Repository{
         super('deck_card',database);
         this.proxy = proxy;
     }
-    async searchCards(query){
-        const results = await this.proxy.search(query);
-        return this.makeManyCards(results);
+    async searchCards(name){
+        const results = await this.proxy.search(name);
+        const cards = this.makeMany(results);
+        console.log(cards);
+        return cards;
     }
     async getCard(id){
         const result = await this.proxy.get(id);
-        return this.makeCard(result);
+        return this.make(result);
     }
     async getDeckCards(deckId){
         try {
@@ -24,34 +26,27 @@ class CardRepository extends Repository{
             throw new Error(e);
         }
     }
-    async makeManyCards(data){
+     makeMany(data){
         const cards = [];
         for(let i = 0; i < data.length; i++){
             const rawCard = data[i];
-            const card = this.makeCard(rawCard);
+            const card = this.make(rawCard);
             cards.push(card);
         }
         return cards;
     }
-    async makeCard(data){
-        return new Card(data.multiverseid,
+    make(data){
+
+        return new Card(data.id,
             data.name,
-            data.manaCost,
+            data.mana_cost,
             data.cmc,
-            data.setName,
-            data.types,
-            data.supertypes,
-            data.subtypes,
+            data.set_name,
+            data.type_line,
             data.colors,
             data.rarity,
-            data.text,
-            data.imageUrl);
-    }
-    async make(data){
-        const result = await this.proxy.get(data.card);
-        const cardData = result[0];
-        const card = await this.makeCard(cardData);
-        return new DeckCard(data.deck,card,data.copies);
+            data.oracle_text,
+            data.image_uris.small);
     }
 }
 module.exports = CardRepository;

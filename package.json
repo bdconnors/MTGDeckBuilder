@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/rjg5314/MTGApplication#readme",
   "dependencies": {
+    "axios": "^0.19.2",
     "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
     "connect-redis": "^4.0.4",
