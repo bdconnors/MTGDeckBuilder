@@ -1,13 +1,15 @@
 <div class="body-container">
 <div class="input-group">
-    <input id="cardSearch" name="searchVal" type="text" class="form-control" placeholder="Search Cards">
+
     <div class="input-group-append">
-        <button id="cardSearchSubmit" class="btn btn-secondary" type="button">
-            <i class="fa fa-search"></i>
-        </button>
+        <form id="cardSearchForm" method="GET" onsubmit="return search.submit(e)">
+            <input id="cardSearch" name="name" type="text" class="form-control" placeholder="Search Cards">
+            <button id="cardSearchSubmit" class="btn btn-secondary" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+
     </div>
 </div>
-<form id="cardSearchForm" method="GET">
-    <input id="cardSearchValue" type="hidden" name="name">
-</form>
+
 </div>
