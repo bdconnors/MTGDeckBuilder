@@ -4,16 +4,14 @@ class CardService extends Service{
     constructor(repo){
         super(repo);
     }
-    async query(values){
-        return await this.repo.searchCards(values);
+    async getAllCards(){
+        return await this.repo.getAllCards();
+    }
+    async search(name){
+        return await this.repo.searchCards(name);
     }
     async getCard(id){
-        let card = false;
-        const results = await this.repo.getCard(id);
-        if(results.length !== 0){
-            card = results[0];
-        }
-        return card;
+        return await this.repo.getCard(id);
     }
 }
 module.exports = CardService;

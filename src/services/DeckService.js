@@ -2,10 +2,10 @@ const validation = require('../util/validation');
 const Service = require('./Service');
 class DeckService extends Service{
 
-    constructor(repo){
+    constructor(repo,cardRepo){
         super(repo);
+        this.cards = cardRepo;
     }
-
     async getDeck(deckId){
         try{
             return await this.repo.retrieve({id:deckId});
@@ -13,38 +13,27 @@ class DeckService extends Service{
             throw new Error('deck not found');
         }
     }
-    async newDeck(userId,deckName){
+    async newDeck(userId,deckName) {
         try {
             const id = userId.toString();
-            this.validateNewDeck(id,deckName);
+            this.validateNewDeck(id, deckName);
             return await this.repo.create({user: id, name: deckName});
 
-        }catch (e) {
+        } catch (e) {
             throw new Error(e);
-        }
-    }
-    async addToDeck(deckId,cardId,copies){
-        const valid = this.validateAdd(deckId,cardId,copies);
-        if(valid) {
-            return await this.repo.createDeckCard(deckId, cardId, copies);
-        }else{
-            return false;
         }
     }
     async getUserDecks(userId){
         return await this.repo.getUserDecks(userId);
+    }
+    async getDeckContents(deckId){
+        return await this.cards.getDeckCards(deckId);
     }
     validateNewDeck(id,name){
         const valid = validation.validAddDeck(id,name);
         if(!valid){
             throw new Error('invalid user id or deck name');
         }
-    }
-    validateAdd(deckId,cardId,copies){
-        const validDeckId = validation.isInt(deckId);
-        const validCardId = validation.isInt(cardId);
-        const validCopies = validation.isInt(copies);
-        return validDeckId && validCardId && validCopies;
     }
 
 }

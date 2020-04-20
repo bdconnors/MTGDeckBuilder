@@ -40,15 +40,10 @@ server.register(home,CONFIG.ROUTES.HOME);
 server.register(auth,CONFIG.ROUTES.AUTH);
 server.register(cards,CONFIG.ROUTES.CARDS);
 server.register(decks,CONFIG.ROUTES.DECKS);
-/**
- * Starts the server
- * opens connection to database
- * loads the records into the repositories
- * **/
+
 async function start(){
     await database.connect();
     server.start();
 }
 //executes start() running node index.js in command line
 module.exports = start();
-

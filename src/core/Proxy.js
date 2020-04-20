@@ -1,113 +1,46 @@
-const mtg = require('mtgsdk');
+const axios = require('axios');
+
 class Proxy{
     constructor(config){
         this.config = config;
     }
     async getAll(){
         try {
-            return await this.search({});
+            const query = CONFIG.PROXY.SEARCH_BASE;
+            const response = await this.api(query);
+            return response.data;
         }catch (e) {
-            throw new Error(e);
+            return [];
         }
     }
     async get(id){
         try {
-            return await this.search({multiverseid: id});
+            const response = await this.api(id);
+            return response.data;
         }catch (e) {
-            throw new Error(e);
+            return -1;
         }
     }
-    async search(query){
-        try {
-            const results = await this.apiQuery(query);
-            return this.processResults(results);
-        }catch (e) {
-            throw new Error(e);
-        }
-    }
-    processResults(results){
-        try {
-            const data = [];
-            results.forEach((queryResult) => {
-                if (!this.alreadyExists(queryResult.name, data)) {
-                    if (this.hasMultipleVersions(queryResult.name, results)) {
-                        const imageVersion = this.getVersionWithImage(queryResult.name, results);
-                        data.push(imageVersion);
-                    } else {
-                        data.push(queryResult);
-                    }
-                }
-            });
-            return data;
-        }catch (e) {
-            throw new Error(e);
-        }
-    }
-    async apiQuery(query){
-        return new Promise((res,rej)=>{
-            let count = 0;
-            let cards = [];
-            let apiQuery = {...this.config.BASE_QUERY,...query};
-            mtg.card.all(apiQuery).on('data',(data)=>{
-                const isBasic = data.supertypes.includes('Basic');
-                const isLand = data.types.includes('Land');
-                if(!isBasic && !isLand) {
-                    cards.push(data);
-                    count++;
-                    console.log('loading card # ' + count);
-                }
-            });
-            mtg.card.all(apiQuery).on('end',()=>{
-                res(cards);
-            });
-            mtg.card.all(apiQuery).on('error',(e)=>{
-                throw new Error(e);
-            });
-        });
-    }
-    hasMultipleVersions(name,results){
-        let hasMultiple = false;
-        const versions = this.getAllVersions(name,results);
-        if(versions.length > 1){
-            hasMultiple = true;
-        }
-        return hasMultiple;
-    }
-    getVersionWithImage(name,totalResults){
-        let first = false;
-        const versions = this.getAllVersions(name,totalResults);
-        if(versions.length > 0){
-            for(let i = 0; i < versions.length; i++){
-                const version = versions[i];
-                if(this.hasImage(version)){
-                    first = version;
-                }
+    async search(name) {
+        try{
+            const query = CONFIG.PROXY.SEARCH_BASE + "+" + CONFIG.PROXY.PARAM.NAME + name;
+            const response = await this.api(query);
+            if(response.data.object === 'list') {
+                return response.data.data;
             }
+        } catch(e){
+            return [];
         }
-        return first;
     }
-    getAllVersions(name,results){
-        return results.filter((version)=> {
-            return version.name === name;
+    async api(query){
+        const url = this.config.BASE+query;
+        return await axios.get(url).then((response)=>{
+            return response;
+        }).catch((e)=>{
+            throw new Error(e);
         });
     }
-    hasImage(version){
-        let imageExists = false;
-        if(version.imageUrl){
-            imageExists = true;
-        }
-        return imageExists;
-    }
-    alreadyExists(name,results){
-        let exists = false;
-        const resultExists = results.find((result)=>{
-            return result.name === name;
-        });
-        if(resultExists){
-            exists = true;
-        }
-        return exists;
-    }
+
 }
 module.exports = Proxy;
 /**module.exports = ApiProxy;

@@ -11,13 +11,13 @@
     });%>
     <h1>My Decks</h1>
 </div>
-<%if(deck.length === 0) {%>
+<%if(decks.length === 0) {%>
 <div class="body-container" style="text-align:center;">
     <p>
         <b>You haven't created any deck</b>
     </p>
 </div>
 <%}else{%>
-    <%-include('./components/deck',{deck:deck})%>
+    <%-include('./components/decks',{decks:decks})%>
 <%}%>
 <%-include('./components/foot',{scripts:['navigation','deck'],styles:['navigation']})%>
