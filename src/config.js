@@ -23,7 +23,7 @@ global.CONFIG = {
     DB:{
         host:'localhost',
         user:'root',
-        password:'79484shao',
+        password:'Rubix123',
         database:'mtg'
     },
     ENCRYPTION: {
@@ -39,7 +39,7 @@ global.CONFIG = {
     },
     ROUTES:{
         HOME:[
-            {method:'get',path:'/',endpoint:'index'},
+            {method:'get',path:'/',endpoint:'index'}
         ],
         AUTH:[
             {method:'post',path:'/login',endpoint:'login'},
