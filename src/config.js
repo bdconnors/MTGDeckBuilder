@@ -23,7 +23,7 @@ global.CONFIG = {
     DB:{
         host:'localhost',
         user:'root',
-        password:'Rubix123',
+        password:'79484shao',
         database:'mtg'
     },
     ENCRYPTION: {
