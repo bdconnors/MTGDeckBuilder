@@ -7,6 +7,10 @@ class CardRepository extends Repository{
         super('deck_card',database);
         this.proxy = proxy;
     }
+    async getAllCards(){
+        const cards = await this.proxy.getAll();
+        return this.makeMany(cards);
+    }
     async searchCards(name){
         const results = await this.proxy.search(name);
         const cards = this.makeMany(results);
@@ -25,15 +29,6 @@ class CardRepository extends Repository{
         }catch (e) {
             throw new Error(e);
         }
-    }
-     makeMany(data){
-        const cards = [];
-        for(let i = 0; i < data.length; i++){
-            const rawCard = data[i];
-            const card = this.make(rawCard);
-            cards.push(card);
-        }
-        return cards;
     }
     make(data){
 
