@@ -1,5 +1,5 @@
 const Repository = require('./Repository.js');
-const User = require('../models/User');
+const User = require('../../models').User;
 
 class UserRepository extends Repository{
 
@@ -7,13 +7,15 @@ class UserRepository extends Repository{
         super('user',database);
     }
     async getByEmail(email) {
-        try {
+   
             const result = await this.database.execute('RETRIEVE', 'USER_BY_EMAIL', {email: email});
-            const data = result[0][0];
-            return this.make(data);
-        }catch (e) {
-            throw new Error(e);
-        }
+            if(result[0][0]){
+                const data = result[0][0];
+                return this.make(data);
+            }else{
+                return false
+            }
+
     }
     async make(data){
         return new User(data.id,data.email,data.password);

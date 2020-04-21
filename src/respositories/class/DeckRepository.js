@@ -1,5 +1,5 @@
 const Repository = require('./Repository.js');
-const Deck = require('../models/Deck');
+const Deck = require('../../models').Deck;
 
 class DeckRepository extends Repository{
 

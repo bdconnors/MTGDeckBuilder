@@ -9,7 +9,8 @@ const bcrypt = require('bcrypt');
  * **/
 module.exports.hash = async (data) => {
     return new Promise((res,rej)=>{
-        const saltRounds = CONFIG.ENCRYPTION.SALT;
+        const saltRounds = process.env.ENCRYPTION_SALT;
+        console.log(saltRounds);
         bcrypt.hash(data,saltRounds,(err,hash)=>{
             if(err){rej(err)}
             res(hash);

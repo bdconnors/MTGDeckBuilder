@@ -1,4 +1,4 @@
-const validation = require('../util/validation');
+const validation = require('../../util').Validation;
 const Service = require('./Service');
 class DeckService extends Service{
 

@@ -9,17 +9,18 @@ class AuthenticationController extends Controller{
         try {
             const email = req.body.email;
             const password = req.body.password;
-            await await this.service.authenticate(email, password);
+            await this.service.authenticate(email, password);
             req.session.user = await this.service.getUser(email);
             console.log(req.session.user);
             res.redirect('/decks');
         }catch (e) {
-            res.redirect('/cards');
+            console.log(e);
+            res.redirect('/');
         }
     }
     async logout(req,res){
         await req.session.destroy();
-        res.redirect('/cards');
+        res.redirect('/');
     }
     async verify(req,res){
         try {

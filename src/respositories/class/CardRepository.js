@@ -1,6 +1,6 @@
 const Repository = require('./Repository');
-const Card = require('../models/Card');
-const DeckCard = require('../models/DeckCard');
+const Card = require('../../models').Card;
+const DeckCard = require('../../models').DeckCard;
 
 class CardRepository extends Repository{
     constructor(database,proxy){
