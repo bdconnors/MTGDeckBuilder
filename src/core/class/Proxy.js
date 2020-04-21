@@ -1,13 +1,17 @@
 const axios = require('axios');
 
 class Proxy{
-    constructor(config){
-        this.config = config;
+    constructor(){
+        this.base = process.env.PROXY_BASE;
+        this.query = process.env.PROXY_QUERY;
+        this.param = {
+            name:process.env.PROXY_PARAM_NAME
+        };
     }
     async getAll(){
         try {
-            const query = CONFIG.PROXY.SEARCH_BASE;
-            const response = await this.api(query);
+            const extension = this.query;
+            const response = await this.api(extension);
             if(response.data.object === 'list') {
                 return response.data.data;
             }else{
@@ -27,8 +31,8 @@ class Proxy{
     }
     async search(name) {
         try{
-            const query = CONFIG.PROXY.SEARCH_BASE + "+" + CONFIG.PROXY.PARAM.NAME + name;
-            const response = await this.api(query);
+            const extension = this.query + "+" + this.param.name + name;
+            const response = await this.api(extension);
             if(response.data.object === 'list') {
                 return response.data.data;
             }else{
@@ -38,8 +42,8 @@ class Proxy{
             return [];
         }
     }
-    async api(query){
-        const url = this.config.BASE+query;
+    async api(extension){
+        const url = this.base+extension;
         return await axios.get(url).then((response)=>{
             return response;
         }).catch((e)=>{

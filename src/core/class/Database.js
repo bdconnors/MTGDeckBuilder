@@ -1,12 +1,20 @@
 const mysql = require('mysql2');
 class Database {
 
-    constructor(config){
-        this.config = config;
+    constructor(){
         this.conn = null;
     }
     async connect(){
-        this.conn = await mysql.createConnection(this.config);
+        try {
+            this.conn = await mysql.createConnection({
+                host: process.env.DB_HOST,
+                user: process.env.DB_USER,
+                password: process.env.DB_PASSWORD,
+                database: process.env.DB_SCHEMA
+            });
+        }catch (e) {
+            throw new Error(e);
+        }
     }
     async execute(method, name, values){
         console.log(method,name,values);

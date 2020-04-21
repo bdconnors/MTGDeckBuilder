@@ -1,5 +1,5 @@
-const encryption = require('../util/Encryption');
-const validation = require('../util/Validation');
+const encryption = require('../../util').Encryption;
+const validation = require('../../util').Validation;
 const Service = require('./Service');
 
 class AuthenticationService extends Service{
