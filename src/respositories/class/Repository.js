@@ -60,7 +60,6 @@ class Repository {
         }
     }
     makeMany(data){
-        console.log(data);
         const results = [];
         for(let i = 0; i < data.length; i++){
             const entity = this.make(data[i]);
@@ -68,7 +67,7 @@ class Repository {
         }
         return results;
     }
-     make(data){
+    make(data){
         throw new Error('Please override make function from parent class Repository');
     }
 

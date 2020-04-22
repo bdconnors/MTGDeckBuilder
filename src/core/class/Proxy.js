@@ -45,6 +45,7 @@ class Proxy{
     async api(extension){
         const url = this.base+extension;
         return await axios.get(url).then((response)=>{
+            console.log(response);
             return response;
         }).catch((e)=>{
             throw new Error(e);

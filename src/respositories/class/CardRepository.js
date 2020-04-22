@@ -1,6 +1,5 @@
 const Repository = require('./Repository');
 const Card = require('../../models').Card;
-const DeckCard = require('../../models').DeckCard;
 
 class CardRepository extends Repository{
     constructor(database,proxy){
@@ -13,9 +12,7 @@ class CardRepository extends Repository{
     }
     async searchCards(name){
         const results = await this.proxy.search(name);
-        const cards = this.makeMany(results);
-        console.log(cards);
-        return cards;
+        return this.makeMany(results);
     }
     async getCard(id){
         const result = await this.proxy.get(id);
@@ -41,7 +38,7 @@ class CardRepository extends Repository{
             data.colors,
             data.rarity,
             data.oracle_text,
-            data.image_uris.small);
+            data.image_uris);
     }
 }
 module.exports = CardRepository;
