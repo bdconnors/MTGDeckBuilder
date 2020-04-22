@@ -1,18 +1,11 @@
 <div class="body-container">
-    <%if(cards){%>
+
         <% const cardCount = cards.length %>
         <% const rows = Math.floor(cardCount/4) %>
         <% const hasOrphanCards = cardCount % 4 !== 0 %>
         <% var currentCard = 0 %>
         <table class="mlr-auto">
             <tbody>
-            <tr>
-                <th class="txt-center">
-                <%if(cardCount === 0){%>
-                        No Cards Founds
-                <%}%>
-                </th>
-            </tr>
             <%for(let i = 0; i < rows; i++){%>
                 <tr>
                     <%for(let i = 0; i < 4; i++){%>
@@ -39,5 +32,5 @@
             <%}%>
             </tbody>
         </table>
-    <%}%>
+
 </div>

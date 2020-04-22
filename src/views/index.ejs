@@ -1,5 +1,11 @@
 <%-include('components/head',{title:'MTG Deck Builder|Home'})%>
 <%-include('components/navigation',{session:session})%>
 <%-include('components/searchBar')%>
-<%-include('components/cards',{session:session,cards:cards})%>
+<% if (cards) { %>
+    <% if (cards.length > 0) { %>
+        <%-include('components/cards',{session:session,cards:cards})%>
+    <%}else{%>
+        <%-include('components/notFound')%>
+    <%}%>
+<%}%>
 <%-include('components/foot',{scripts:['search','navigation'],styles:['search','navigation']})%>
