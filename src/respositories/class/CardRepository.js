@@ -8,7 +8,7 @@ class CardRepository extends Repository{
         this.proxy = proxy;
     }
     async retrieve(query){
-        const response = await this.proxy.search(query);
+        const response = await this.proxy.search(query); //gets the card data returned from the api
         return this.makeSearchResults(response);
     }
     async getDeckCards(deckId){
@@ -21,11 +21,11 @@ class CardRepository extends Repository{
         }
     }
     makeSearchResults(response){
-        console.log(response.total);
+        console.log("Number of cards received: " + response.total);
         const searchResults = new SearchResults(response.total);
         searchResults.results = this.makeMany(response.data);
         searchResults.currentPage = response.page;
-        console.log('repo');
+        console.log('card repo makeSearchResults() done');
         return searchResults;
     }
     make(data){

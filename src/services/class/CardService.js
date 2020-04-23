@@ -5,8 +5,8 @@ class CardService extends Service{
         super(repo);
     }
     async search(query){
-        const result = await this.repo.retrieve(query);
-        console.log('service');
+        const result = await this.repo.retrieve(query); //returns searchResults object
+        console.log('search() from card service done');
         return result;
     }
 }

@@ -16,8 +16,9 @@ class Server {
     constructor(database,proxy){
         this.database = database;
         this.proxy = proxy;
-        this.instance = express();
-        this.router = express.Router();
+        this.instance = express(); //express app
+        this.router = express.Router(); //Router-level middleware works in the same way as application-level middleware,
+                                        // except it is bound to an instance of express.Router().
         this.repo = [];
         this.svc = [];
         this.ctrl = [];
@@ -66,12 +67,26 @@ class Server {
     }
     register(type,label,component) {
         if(type === "ctrl"){
+            //used for controllers
             this.setRoutes(component,routes[label]);
         }
+        /*
+         * Using [type] array to
+         */
         this[type][label] = component;
     }
+
     setRoutes(controller,routes){
         routes.forEach((route)=>{
+            /*
+            * router.METHOD(path, [callback, ...] callback)
+            * The router.METHOD() methods provide the routing functionality in Express,
+            *  where METHOD is one of the HTTP methods, such as GET, PUT, POST, and so on,
+            * in lowercase. Thus, the actual methods are router.get(), router.post(), router.put(), and so on.
+            * i.e.  this.router['get']('/', homecontroller['index'].bind(homecontroller)
+            *       called from
+            *       register("ctrl", "HOME", homeController)
+            * */
             this.router[route.method](route.path,controller[route.endpoint].bind(controller));
         });
     }

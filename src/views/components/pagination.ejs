@@ -8,22 +8,24 @@
         prev = "common.paginate("+search.getPrevPage()+");";
     }
  %>
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        <li class="page-item">
-            <a class="page-link" onclick="<%=prev%>" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-            </a>
-        </li>
-       <%for(let i = 1; i <= search.getPageCount(); i++){%>
-            <li class="page-item"><a class="page-link" onclick="common.paginate(<%=i%>)"><%=i%></a></li>
-        <%}%>
-        <li class="page-item">
-            <a class="page-link" onclick="<%=next%>" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-            </a>
-        </li>
-    </ul>
-</nav>
+<div class="paginationControl">
+    <nav class="paginationNav" aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" onclick="<%=prev%>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+           <%for(let i = 1; i <= search.getPageCount(); i++){%>
+                <li class="page-item"><a class="page-link" onclick="common.paginate(<%=i%>)"><%=i%></a></li>
+            <%}%>
+            <li class="page-item">
+                <a class="page-link" onclick="<%=next%>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
