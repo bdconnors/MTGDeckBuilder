@@ -109,8 +109,8 @@ class Server {
         this.instance.use(express.urlencoded({extended: false}));
         this.instance.use(bodyParser.json());
         this.instance.use(this.router);
-        console.log(path.join(__dirname, '../../views'));
-        this.instance.use(express.static(path.join(__dirname, '../../views')));
+        this.instance.use(express.static('../public'));
+        this.instance.set('views','../public');
         this.instance.set('view engine', process.env.VIEW_ENGINE);
     }
 
