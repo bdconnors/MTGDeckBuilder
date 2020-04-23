@@ -40,6 +40,11 @@
     margin: 0 0 9px 0;
 }
 
+.paginationnav{
+    width: auto;
+    margin:0 auto;
+}
+
 @media only screen and (min-width: 660px){
     .card-grid-item{
         width: 32.75%;

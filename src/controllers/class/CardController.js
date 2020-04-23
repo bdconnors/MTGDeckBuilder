@@ -6,7 +6,7 @@ class CardController extends Controller{
     }
     async index(req,res){
         const search = await this.service.search(req.query);
-        console.log('controller');
+        console.log('Card controller method(index) called');
         res.render('cardsIndex',{session:req.session,search:search});
     }
     async profile(req,res){

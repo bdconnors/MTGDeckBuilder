@@ -1,19 +1,18 @@
 const axios = require('axios');
-
+/* handles calls to the api */
 class Proxy{
     constructor(){}
     async search(query) {
         try{
-
             return await this.api(query);
         } catch(e){
             return {total:0,page:1,data:[]};
         }
     }
     buildURL(query){
-        let url = process.env.PROXY_BASE;
+        let url = process.env.PROXY_BASE; //link to the api
         if(query.id){
-            url+= query.id;
+            url+= query.id; //adds an id the end of the query
         }else{
             let page = 1;
             if(query.page){page = query.page;}
@@ -23,6 +22,7 @@ class Proxy{
                 url += process.env.PROXY_QUERY_PARAM_NAME + query.name;
             }
         }
+        //console.log(url); //checking what is sent to the db
         return url;
     }
     async api(query){
@@ -34,13 +34,16 @@ class Proxy{
             if(response.data.object === 'card'){
                 total = 1;
                 page = 1;
-                console.log(response.data);
+                //console.log(response.data);
                 data = [response.data];
             }else if(response.data.object === 'list'){
                 page = 1;
-                if(query.page){page = query.page;}
-                total = response.data.total_cards;
-                data = response.data.data;
+                //console.log(response.data);
+                if(query.page){
+                    page = query.page;
+                }
+                total = response.data.total_cards; //number of cards from the list of search results
+                data = response.data.data; //the actual card data
             }
             return {total:total,page:page,data:data};
         }).catch((e)=>{
