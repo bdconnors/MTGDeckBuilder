@@ -2,7 +2,7 @@
     <div class="card-grid-inner">
         <%for(let i = 0; i < cards.length; i++){%>
             <div class="card-grid-item">
-                <a href="/card/<%=cards[i].id%>">
+                <a href="/cards/<%=cards[i].id%>">
                     <%-include('./card',{card:cards[i]})%>
                 </a>
             </div>
