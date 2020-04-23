@@ -10,7 +10,7 @@ class CardController extends Controller{
         res.render('cardsIndex',{session:req.session,search:search});
     }
     async profile(req,res){
-        const search = await this.service.search(req.query);
+        const search = await this.service.search(req.params);
         if(search.total === 0) {
             res.send('card not found');
         }else{

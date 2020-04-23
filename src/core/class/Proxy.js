@@ -31,6 +31,7 @@ class Proxy{
             let data;
             if(response.data.object === 'card'){
                 total = 1;
+                console.log(response.data);
                 data = [response.data];
             }else if(response.data.object === 'list'){
                 total = response.data.total_cards;
