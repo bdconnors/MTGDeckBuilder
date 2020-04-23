@@ -4,10 +4,10 @@ class Proxy{
     constructor(){}
     async search(query) {
         try{
-            let url = this.buildURL(query);
-            return await this.api(url);
+
+            return await this.api(query);
         } catch(e){
-            return {total:0,data:[]};
+            return {total:0,page:1,data:[]};
         }
     }
     buildURL(query){
@@ -25,19 +25,24 @@ class Proxy{
         }
         return url;
     }
-    async api(url){
+    async api(query){
+        let url = this.buildURL(query);
         return await axios.get(url).then((response)=>{
+            let page;
             let total;
             let data;
             if(response.data.object === 'card'){
                 total = 1;
+                page = 1;
                 console.log(response.data);
                 data = [response.data];
             }else if(response.data.object === 'list'){
+                page = 1;
+                if(query.page){page = query.page;}
                 total = response.data.total_cards;
                 data = response.data.data;
             }
-            return {total:total,data:data};
+            return {total:total,page:page,data:data};
         }).catch((e)=>{
             throw new Error(e);
         });

@@ -90,13 +90,20 @@ const common = {
             $(id).modal('hide');
         }
     },
-    enterKeyPressed: (e) => {
-        let pressed = false;
-        if (e.key) {
-            if (e.key === 'Enter') {
-                pressed = true;
-            }
+    updateURIParam:(uri, key, value)=>{
+        const reg = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+        const separator = uri.indexOf('?') !== -1 ? "&" : "?";
+        if (uri.match(reg)) {
+            return uri.replace(reg, '$1' + key + "=" + value + '$2');
+        } else {
+            return uri + separator + key + "=" + value;
         }
-        return pressed
+    },
+    paginate:(pageNumber)=>{
+        const page = common.updateURIParam(window.location.href, 'page', pageNumber);
+        if(page !== window.location.href){
+            window.location.href = page;
+        }
+
     }
 };

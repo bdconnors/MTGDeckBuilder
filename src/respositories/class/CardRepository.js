@@ -24,6 +24,7 @@ class CardRepository extends Repository{
         console.log(response.total);
         const searchResults = new SearchResults(response.total);
         searchResults.results = this.makeMany(response.data);
+        searchResults.currentPage = response.page;
         console.log('repo');
         return searchResults;
     }
