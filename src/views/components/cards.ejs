@@ -1,34 +1,17 @@
-<div class="body-container">
-
-        <% const cardCount = cards.length %>
-        <% const rows = Math.floor(cardCount/4) %>
-        <% const hasOrphanCards = cardCount % 4 !== 0 %>
-        <% var currentCard = 0 %>
-        <div class="container">
-            <%for(let i = 0; i < rows; i++){%>
-                <div class="row">
-                    <%for(let i = 0; i < 4; i++){%>
-                        <div class="col">
-                            <a class="mx-auto" href="/cards/<%=cards[currentCard].id%>">
-                                <%-include('./card',{card:cards[currentCard]})%>
-                            </a>
-                        </div>
-                        <%currentCard++%>
-                    <%}%>
-                </div>
-            <%}%>
-            <%if(hasOrphanCards){%>
-                <div class="row">
-                    <%for(let i = currentCard; i < cardCount; i++){%>
-                        <div class="col">
-                            <a class="mx-auto" href="/cards/<%=cards[currentCard].id%>">
-                                <%-include('./card',{card:cards[currentCard]})%>
-                            </a>
-                        </div>
-                        <%currentCard++%>
-                    <%}%>
-                </div>
-            <%}%>
+<div class="body-container card-grid">
+    <% const cardCount = cards.length %>
+    <% const rows = Math.floor(cardCount/4) %>
+    <% const hasOrphanCards = cardCount % 4 !== 0 %>
+    <% var currentCard = 0 %>
+    <div class="card-grid-inner">
+        <%for(let i = 0; i < cardCount; i++){%>
+        <div class="card-grid-item">
+            <a href="/cards/<%=cards[currentCard].id%>">
+                <%-include('./card',{card:cards[currentCard]})%>
+            </a>
         </div>
+        <%currentCard++%>
+        <%}%>
+    </div>
 
 </div>
