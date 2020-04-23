@@ -1,57 +1,58 @@
 const axios = require('axios');
-
+/* handles calls to the api */
 class Proxy{
-    constructor(){
-        this.base = process.env.PROXY_BASE;
-        this.query = process.env.PROXY_QUERY;
-        this.param = {
-            name:process.env.PROXY_PARAM_NAME
-        };
-    }
-    async getAll(){
-        try {
-            const extension = this.query;
-            const response = await this.api(extension);
-            if(response.data.object === 'list') {
-                return response.data.data;
-            }else{
-                return [];
-            }
-        }catch (e) {
-            return [];
-        }
-    }
-    async get(id){
-        try {
-            const response = await this.api(id);
-            return response.data;
-        }catch (e) {
-            return -1;
-        }
-    }
-    async search(name) {
+    constructor(){}
+    async search(query) {
         try{
-            const extension = this.query + "+" + this.param.name + name;
-            const response = await this.api(extension);
-            if(response.data.object === 'list') {
-                return response.data.data;
-            }else{
-                return [];
-            }
+            return await this.api(query);
         } catch(e){
-            return [];
+            return {total:0,page:1,data:[]};
         }
     }
-    async api(extension){
-        const url = this.base+extension;
+    buildURL(query){
+        let url = process.env.PROXY_BASE; //link to the api
+        if(query.id){
+            url+= query.id; //adds an id the end of the query
+        }else{
+            let page = 1;
+            if(query.page){page = query.page;}
+            url += process.env.PROXY_SEARCH_BASE + page;
+            url += process.env.PROXY_QUERY_BASE;
+            if (query.name) {
+                url += process.env.PROXY_QUERY_PARAM_NAME + query.name;
+            }
+        }
+        //console.log(url); //checking what is sent to the db
+        return url;
+    }
+    async api(query){
+        let url = this.buildURL(query);
         return await axios.get(url).then((response)=>{
-            return response;
+            let page;
+            let total;
+            let data;
+            if(response.data.object === 'card'){
+                total = 1;
+                page = 1;
+                //console.log(response.data);
+                data = [response.data];
+            }else if(response.data.object === 'list'){
+                page = 1;
+                //console.log(response.data);
+                if(query.page){
+                    page = query.page;
+                }
+                total = response.data.total_cards; //number of cards from the list of search results
+                data = response.data.data; //the actual card data
+            }
+            return {total:total,page:page,data:data};
         }).catch((e)=>{
             throw new Error(e);
         });
     }
-
 }
+
+
 module.exports = Proxy;
 /**module.exports = ApiProxy;
 const apiRequest = async (query) =>{

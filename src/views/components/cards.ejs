@@ -1,43 +1,14 @@
-<div class="body-container">
-    <%if(cards){%>
-        <% const cardCount = cards.length %>
-        <% const rows = Math.floor(cardCount/4) %>
-        <% const hasOrphanCards = cardCount % 4 !== 0 %>
-        <% var currentCard = 0 %>
-        <table class="mlr-auto">
-            <tbody>
-            <tr>
-                <th class="txt-center">
-                <%if(cardCount === 0){%>
-                        No Cards Founds
-                <%}%>
-                </th>
-            </tr>
-            <%for(let i = 0; i < rows; i++){%>
-                <tr>
-                    <%for(let i = 0; i < 4; i++){%>
-                        <td>
-                            <a class="mx-auto" href="/cards/<%=cards[currentCard].id%>">
-                                <%-include('./card',{card:cards[currentCard]})%>
-                            </a>
-                        </td>
-                        <%currentCard++%>
-                    <%}%>
-                </tr>
-            <%}%>
-            <%if(hasOrphanCards){%>
-                <tr>
-                    <%for(let i = currentCard; i < cardCount; i++){%>
-                        <td>
-                            <a class="mx-auto" href="/cards/<%=cards[currentCard].id%>">
-                                <%-include('./card',{card:cards[currentCard]})%>
-                            </a>
-                        </td>
-                        <%currentCard++%>
-                    <%}%>
-                </tr>
-            <%}%>
-            </tbody>
-        </table>
-    <%}%>
+<div class="search-info">
+    <p><strong><%=search.total%></strong><span> cards where the name includes</span></p>
+</div>
+<div class="body-container card-grid">
+    <div class="card-grid-inner">
+        <%for(let i = 0; i < cards.length; i++){%>
+            <div class="card-grid-item">
+                <a href="/cards/<%=cards[i].id%>">
+                    <%-include('./card',{card:cards[i]})%>
+                </a>
+            </div>
+        <%}%>
+    </div>
 </div>

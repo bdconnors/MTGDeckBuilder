@@ -14,9 +14,3 @@ const search = {
         //}
     }
 };
-/*
-$(document).ready(() => {
-    $(ELEMENTS.SEARCH_BAR.ID).on('keyup', search.submit);
-    $(ELEMENTS.SEARCH_BAR.SUBMIT_BTN).on('click',search.submit);
-    console.log(search.page);
-});*/

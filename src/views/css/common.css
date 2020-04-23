@@ -2,3 +2,74 @@
     width: 50%;
     margin: 50px auto;
 }
+
+.card-grid{
+    display: block;
+    width: 100%;
+    padding: 0 2.5%;
+    margin: 20px 0 15px 0;
+}
+
+.card-grid-inner{
+    width: 100%;
+    max-width: 1000px;
+    position: relative;
+    margin: 0 auto;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-flow: row wrap;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+
+.card-grid-item{
+    page-break-after: auto;
+    page-break-before: auto;
+    page-break-inside: avoid;
+    position: relative;
+    display: block;
+    width: 49.25%;
+    margin: 0 0 9px 0;
+}
+
+.paginationControl{
+    margin:0;
+}
+
+.paginationNav{
+    max-width: 50%;
+    margin:0 auto;
+}
+
+.paginationNav ul{
+    padding-left: inherit;
+}
+
+.search-info{
+    font-size: 12px;
+    padding: 8px 2.5%;
+    color: #535353;
+    border-bottom: 1px solid rgba(99,68,150,0.1);
+    text-align: center;
+    display: block;
+}
+
+@media only screen and (min-width: 660px){
+    .card-grid-item{
+        width: 32.75%;
+    }
+}
+
+@media only screen and (min-width: 920px){
+    .card-grid-item{
+        width: 24.75%;
+    }
+}

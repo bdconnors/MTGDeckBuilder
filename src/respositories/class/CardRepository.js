@@ -1,25 +1,15 @@
 const Repository = require('./Repository');
 const Card = require('../../models').Card;
-const DeckCard = require('../../models').DeckCard;
+const SearchResults = require('../../models').SearchResults;
 
 class CardRepository extends Repository{
     constructor(database,proxy){
         super('deck_card',database);
         this.proxy = proxy;
     }
-    async getAllCards(){
-        const cards = await this.proxy.getAll();
-        return this.makeMany(cards);
-    }
-    async searchCards(name){
-        const results = await this.proxy.search(name);
-        const cards = this.makeMany(results);
-        console.log(cards);
-        return cards;
-    }
-    async getCard(id){
-        const result = await this.proxy.get(id);
-        return this.make(result);
+    async retrieve(query){
+        const response = await this.proxy.search(query); //gets the card data returned from the api
+        return this.makeSearchResults(response);
     }
     async getDeckCards(deckId){
         try {
@@ -29,6 +19,14 @@ class CardRepository extends Repository{
         }catch (e) {
             throw new Error(e);
         }
+    }
+    makeSearchResults(response){
+        console.log("Number of cards received: " + response.total);
+        const searchResults = new SearchResults(response.total);
+        searchResults.results = this.makeMany(response.data);
+        searchResults.currentPage = response.page;
+        console.log('card repo makeSearchResults() done');
+        return searchResults;
     }
     make(data){
 
@@ -41,7 +39,7 @@ class CardRepository extends Repository{
             data.colors,
             data.rarity,
             data.oracle_text,
-            data.image_uris.small);
+            data.image_uris);
     }
 }
 module.exports = CardRepository;
