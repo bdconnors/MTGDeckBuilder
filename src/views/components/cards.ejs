@@ -4,33 +4,31 @@
         <% const rows = Math.floor(cardCount/4) %>
         <% const hasOrphanCards = cardCount % 4 !== 0 %>
         <% var currentCard = 0 %>
-        <table class="mlr-auto">
-            <tbody>
+        <div class="container">
             <%for(let i = 0; i < rows; i++){%>
-                <tr>
+                <div class="row">
                     <%for(let i = 0; i < 4; i++){%>
-                        <td>
+                        <div class="col">
                             <a class="mx-auto" href="/cards/<%=cards[currentCard].id%>">
                                 <%-include('./card',{card:cards[currentCard]})%>
                             </a>
-                        </td>
+                        </div>
                         <%currentCard++%>
                     <%}%>
-                </tr>
+                </div>
             <%}%>
             <%if(hasOrphanCards){%>
-                <tr>
+                <div class="row">
                     <%for(let i = currentCard; i < cardCount; i++){%>
-                        <td>
+                        <div class="col">
                             <a class="mx-auto" href="/cards/<%=cards[currentCard].id%>">
                                 <%-include('./card',{card:cards[currentCard]})%>
                             </a>
-                        </td>
+                        </div>
                         <%currentCard++%>
                     <%}%>
-                </tr>
+                </div>
             <%}%>
-            </tbody>
-        </table>
+        </div>
 
 </div>
