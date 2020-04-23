@@ -1,58 +1,49 @@
 const axios = require('axios');
 
 class Proxy{
-    constructor(){
-        this.base = process.env.PROXY_BASE;
-        this.query = process.env.PROXY_QUERY;
-        this.param = {
-            name:process.env.PROXY_PARAM_NAME
-        };
-    }
-    async getAll(){
-        try {
-            const extension = this.query;
-            const response = await this.api(extension);
-            if(response.data.object === 'list') {
-                return response.data.data;
-            }else{
-                return [];
-            }
-        }catch (e) {
-            return [];
-        }
-    }
-    async get(id){
-        try {
-            const response = await this.api(id);
-            return response.data;
-        }catch (e) {
-            return -1;
-        }
-    }
-    async search(name) {
+    constructor(){}
+    async search(query) {
         try{
-            const extension = this.query + "+" + this.param.name + name;
-            const response = await this.api(extension);
-            if(response.data.object === 'list') {
-                return response.data.data;
-            }else{
-                return [];
-            }
+            let url = this.buildURL(query);
+            return await this.api(url);
         } catch(e){
-            return [];
+            return {total:0,data:[]};
         }
     }
-    async api(extension){
-        const url = this.base+extension;
+    buildURL(query){
+        let url = process.env.PROXY_BASE;
+        if(query.id){
+            url+= query.id;
+        }else{
+            let page = 1;
+            if(query.page){page = query.page;}
+            url += process.env.PROXY_SEARCH_BASE + page;
+            url += process.env.PROXY_QUERY_BASE;
+            if (query.name) {
+                url += process.env.PROXY_QUERY_PARAM_NAME + query.name;
+            }
+        }
+        return url;
+    }
+    async api(url){
         return await axios.get(url).then((response)=>{
-            console.log(response);
-            return response;
+            let total;
+            let data;
+            if(response.data.object === 'card'){
+                total = 1;
+                data = [response.data];
+            }else if(response.data.object === 'list'){
+                total = response.data.total_cards;
+                data = response.data.data;
+            }
+            return {total:total,data:data};
         }).catch((e)=>{
             throw new Error(e);
         });
     }
-
 }
+
+
 module.exports = Proxy;
 /**module.exports = ApiProxy;
 const apiRequest = async (query) =>{

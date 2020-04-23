@@ -1,9 +1,13 @@
 <%-include('components/head',{title:'MTG Deck Builder|Home'})%>
 <%-include('components/navigation',{session:session})%>
 <%-include('components/searchBar')%>
-<% if (cards) { %>
-    <% if (cards.length > 0) { %>
-        <%-include('components/cards',{session:session,cards:cards})%>
+<% if (search) { %>
+    <% if (search.total > 0) {%>
+        <%console.log(search.getPageCount())%>
+        <%-include('components/cards',{session:session,
+        pages:search.getPageCount(),
+        total:search.total,
+        cards:search.results})%>
     <%}else{%>
         <%-include('components/notFound')%>
     <%}%>

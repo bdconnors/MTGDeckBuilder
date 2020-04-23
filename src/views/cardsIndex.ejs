@@ -1,4 +1,5 @@
 <%-include('components/head',{title:'MTG Deck Builder|Cards'})%>
 <%-include('components/navigation',{session:session})%>
-<%-include('components/cards',{session:session,cards:cards})%>
+<%console.log(search.getPageCount());%>
+<%-include('components/cards',{session:session,cards:search.results})%>
 <%-include('components/foot',{scripts:['search','navigation'],styles:['search','navigation']})%>

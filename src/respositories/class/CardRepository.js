@@ -1,22 +1,15 @@
 const Repository = require('./Repository');
 const Card = require('../../models').Card;
+const SearchResults = require('../../models').SearchResults;
 
 class CardRepository extends Repository{
     constructor(database,proxy){
         super('deck_card',database);
         this.proxy = proxy;
     }
-    async getAllCards(){
-        const cards = await this.proxy.getAll();
-        return this.makeMany(cards);
-    }
-    async searchCards(name){
-        const results = await this.proxy.search(name);
-        return this.makeMany(results);
-    }
-    async getCard(id){
-        const result = await this.proxy.get(id);
-        return this.make(result);
+    async retrieve(query){
+        const response = await this.proxy.search(query);
+        return this.makeSearchResults(response);
     }
     async getDeckCards(deckId){
         try {
@@ -26,6 +19,13 @@ class CardRepository extends Repository{
         }catch (e) {
             throw new Error(e);
         }
+    }
+    makeSearchResults(response){
+        console.log(response.total);
+        const searchResults = new SearchResults(response.total);
+        searchResults.results = this.makeMany(response.data);
+        console.log('repo');
+        return searchResults;
     }
     make(data){
 
