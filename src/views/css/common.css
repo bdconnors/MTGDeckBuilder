@@ -40,9 +40,26 @@
     margin: 0 0 9px 0;
 }
 
-.paginationnav{
-    width: auto;
+.paginationControl{
+    margin:0;
+}
+
+.paginationNav{
+    max-width: 50%;
     margin:0 auto;
+}
+
+.paginationNav ul{
+    padding-left: inherit;
+}
+
+.search-info{
+    font-size: 12px;
+    padding: 8px 2.5%;
+    color: #535353;
+    border-bottom: 1px solid rgba(99,68,150,0.1);
+    text-align: center;
+    display: block;
 }
 
 @media only screen and (min-width: 660px){
