@@ -1,6 +1,5 @@
-class Card{
-    constructor(deck,card,copies = 1){
-        this.deck = deck;
+class DeckSlot{
+    constructor(card,copies = 1){
         this.card = card;
         this.copies = copies;
     }
@@ -11,4 +10,4 @@ class Card{
         this.copies-=amount;
     }
 }
-module.exports = Card;
+module.exports = DeckSlot;

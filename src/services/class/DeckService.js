@@ -13,6 +13,13 @@ class DeckService extends Service{
             throw new Error('deck not found');
         }
     }
+    async addCard(deckId,cardId,copies){
+        try{
+            return await this.repo.addDeckSlot(deckId,cardId,copies);
+        }catch (e) {
+            throw new Error(e);
+        }
+    }
     async newDeck(userId,deckName) {
         try {
             const id = userId.toString();
@@ -25,9 +32,6 @@ class DeckService extends Service{
     }
     async getUserDecks(userId){
         return await this.repo.getUserDecks(userId);
-    }
-    async getDeckContents(deckId){
-        return await this.cards.getDeckCards(deckId);
     }
     validateNewDeck(id,name){
         const valid = validation.validAddDeck(id,name);
