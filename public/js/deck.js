@@ -66,15 +66,16 @@ class DeckEdits{
         const quantities = document.getElementsByClassName("card-copies");
         for(let i = 0; i < quantities.length; i++) {
             const quantity = quantities[i];
-            const id = quantity.id;
-            const input = $(`#${id}`);
+            const containerId = quantity.id;
+            const cardId = containerId.split("_")[0];
+            const input = $(`#${cardId}`);
             const inputVal = input.attr('value');
-            const element = $(`#${id}_value_container`);
+            const element = $(`#${cardId}_value_container`);
             element.empty();
             quantity.append(inputVal);
         }
         editForm.addClass("hide-container");
-        editBtn.removClass("hide-container");
+        editBtn.removeClass("hide-container");
         this.edits = [];
     }
     submitChanges(){
