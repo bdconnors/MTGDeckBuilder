@@ -3,10 +3,22 @@
 </div>
 <div class="body-container card-grid">
     <div class="card-grid-inner">
-        <%for(let i = 0; i < cards.length; i++){%>
+        <%for(let i = 0; i < cards.length; i++){
+            const cardId = cards[i].id;
+        %>
             <div class="card-grid-item">
-                <a href="/cards/<%=cards[i].id%>">
+                <a href="/cards/<%=cardId%>">
                     <%-include('./card',{card:cards[i]})%>
+                    <%if(buttons){%>
+                        <%-include('./form/button',{
+                            id:cardId+"AddButton",
+                            type:"button",
+                            cssClass:["btn","btn-secondary"],
+                            label:"Edit",
+                            icon:"pencil",
+                            clickHandler:"modifications.addCard"
+                        })%>
+                    <%}%>
                 </a>
             </div>
         <%}%>

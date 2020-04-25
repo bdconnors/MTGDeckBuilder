@@ -1,10 +1,10 @@
 <button id="<%=id%>" type="<%=type%>" class="
-<%  cssClass.forEach((css)=>{
-%>      <%=css%>
-<%  });
-%>">
-<%  if(icon){
-%>      <i class="fa fa-<%=icon%>"></i>
-<%  }
-%>  <%=label%>
+        <% cssClass.forEach((css)=>{%>
+            <%=css%>
+        <%});%>"
+        onclick="<%=clickHandler%>">
+<%if(icon){%>
+    <i class="fa fa-<%=icon%>"></i>
+<%}%>
+    <%=label%>
 </button>

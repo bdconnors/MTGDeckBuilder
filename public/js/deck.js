@@ -1,14 +1,15 @@
-let editForm;
+let modifyDeckControls;
 let editBtn;
 let cancelBtn;
 
 let modifications;
+
 $(document).ready(()=>{
-    editForm = $("#editDeckForm");
-    editBtn = $("#editDeckButton");
-    cancelBtn = $("#cancelEditButton");
+    modifyDeckControls= $("#modifyDeckControls");
+    editBtn = $("#modifyDeckEditBtn");
+    cancelBtn = $("#modifyDeckResetBtn");
     common.setUpModalForm(ELEMENTS.NAVIGATION.MODAL.NEW_DECK,deck.createNewDeck);
-    if(editForm.length > 0){
+    if(modifyDeckControls.length > 0){
         modifications = new DeckEdits();
         editBtn.on('click',modifications.enable.bind(modifications));
         cancelBtn.on('click',modifications.cancel.bind(modifications));
@@ -59,8 +60,8 @@ class DeckEdits{
             element.append(`<input id="${cardId}" type="number" min="0" max="4" value="${value}">`);
             $(`#${cardId}`).bind('keyup mouseup',this.modify.bind(this));
         }
-        editForm.removeClass("hide-container");
-        editBtn.addClass("hide-container");
+        $("#modifyDeckControls").removeClass("hide-container");
+        $("#modifyDeckShow").addClass("hide-container");
     }
     cancel(){
         const quantities = document.getElementsByClassName("card-copies");
@@ -74,8 +75,8 @@ class DeckEdits{
             element.empty();
             quantity.append(inputVal);
         }
-        editForm.addClass("hide-container");
-        editBtn.removeClass("hide-container");
+        $("#modifyDeckControls").addClass("hide-container");
+        $("#modifyDeckShow").removeClass("hide-container");
         this.edits = [];
     }
     submitChanges(){

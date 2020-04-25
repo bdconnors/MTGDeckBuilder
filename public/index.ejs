@@ -8,6 +8,7 @@
         <%-include('components/pagination',{search:search})%>
         <%-include('components/cards',{session:session,
             pages:search.getPageCount(),
+            buttons:false,
             total:search.total,
             cards:search.results})
         %>
