@@ -2,21 +2,16 @@
 <%-include('./components/navigation',{session:session})%>
 <div class="body-container">
     <h1><%=deck.name%></h1>
-    <%if(session.user){%>
-        <%if(session.user.id === deck.user){%>
-            <%-include('components/form/button',{
-                id:"editDeckButton",
-                type:"button",
-                cssClass:["btn","btn-secondary"],
-                label:"Edit",
-                icon:"pencil"
-            })%>
-            <%-include('components/editDeckForm',{deck:deck})%>
-        <%}%>
-    <%}%>
 </div>
 <%if(deck.cards.length > 0){%>
-    <%-include('components/deckContents',{deck:deck})%>
+<div class="container">
+    <%if(session.user){%>
+        <%if(session.user.id === deck.user){%>
+            <%-include('components/editDeckForm')%>
+        <%}%>
+    <%}%>
+    <%-include('components/deckContents',{session:session,deck:deck})%>
+</div>
 <%}else{%>
     <div class="body-container" style="text-align:center;">
         <p>

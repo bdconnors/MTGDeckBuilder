@@ -4,16 +4,14 @@
     <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='.dual-collapse2'>
         <span class='navbar-toggler-icon'></span>
     </button>
-
-        <div class='navbar-collapse collapse w-100 order-3 dual-collapse2'>
-            <ul class='navbar-nav mr-auto'>
-                <a class="nav-link" href="/cards">Cards</a>
-                <%if(session.user){%>
-                    <a class="nav-link" href="/decks">My Decks</a>
-                <%}%>
-            </ul>
-        </div>
-
+    <div class='navbar-collapse collapse w-100 order-3 dual-collapse2'>
+        <ul class='navbar-nav mr-auto'>
+            <a class="nav-link" href="/cards">All Cards</a>
+            <%if(session.user){%>
+                <a class="nav-link" href="/decks">My Decks</a>
+            <%}%>
+        </ul>
+    </div>
     <div class='navbar-collapse collapse w-100 order-3 dual-collapse2'>
         <ul class='navbar-nav ml-auto'>
             <%if(session.user){%>
@@ -32,7 +30,8 @@
                         type:"button",
                         cssClass:["btn","btn-secondary"],
                         label:"Sign In",
-                        icon:"power-off"
+                        icon:"power-off",
+                        clickHandler:""
                     });%>
                 </li>
                 <li class="nav-item">
@@ -41,7 +40,8 @@
                         type:"button",
                         cssClass:["btn","btn-secondary"],
                         label:"Sign Up",
-                        icon:"user-plus"
+                        icon:"user-plus",
+                        clickHandler:""
                     });%>
                 </li>
             <%}%>

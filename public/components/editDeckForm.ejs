@@ -1,20 +1,58 @@
-<form id="editDeckForm" class="hide-container" method="PUT" action="/edit" onsubmit="return deck.submitChanges">
-    <input name="changes" type="hidden" value="[]">
-    <%-include('form/buttonGroup',{
-            id:"editDeckFormControl",
-            buttons:[{
-            id:"saveEditButton",
-            type:"submit",
+<div id="modifyDeckShow" class="row">
+    <div class="col">
+        <%-include('form/button',{
+        id:"modifyDeckEditBtn",
+        type:"button",
+        cssClass:["btn","btn-secondary"],
+        label:"Edit",
+        icon:"pencil",
+        clickHandler:""
+        })%>
+    </div>
+</div>
+<div id="modifyDeckControls" class="hide-container">
+
+
+        <div class="row">
+        <div class="row">
+            <div class="col">
+                <%-include('form/button',{
+                    id:"modifyDeckResetBtn",
+                    type:"reset",
+                    cssClass:["btn","btn-danger"],
+                    label:"Cancel",
+                    icon:"minus",
+                    clickHandler:""
+                })%>
+            </div>
+            <div class="row" >
+                <div class="col">
+                    <%-include('form/button',{
+                    id:"modifyDeckSaveBtn",
+                    type:"button",
+                    cssClass:["btn","btn-success"],
+                    label:"Save",
+                    icon:"floppy-o",
+                    clickHandler:""
+                    })%>
+                </div>
+            </div>
+        </div>
+        </div>
+    <div class="row" style="padding-top:10px">
+        <div class="col">
+            <%-include('form/button',{
+            id:"modifyDeckAddCardBtn",
+            type:"button",
             cssClass:["btn","btn-secondary"],
-            label:"Save",
-            icon:"pencil"
-        },
-        {
-            id:"cancelEditButton",
-            type:"reset",
-            cssClass:["btn","btn-danger"],
-            label:"Cancel",
-            icon:"minus"
-        }]
-    })%>
-</form>
+            label:"Add Card",
+            icon:"plus",
+            clickHandler:""
+            })%>
+        </div>
+    </div>
+    <form id="editValuesForm" class="hide-container" method="PUT" action="/edit" onsubmit="return deck.submitChanges">
+        <input name="changes" type="hidden" value="[]">
+    </form>
+</div>
+<%-include('addCardSearch')%>
