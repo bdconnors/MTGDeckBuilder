@@ -1,6 +1,75 @@
-<%-include('components/head',{title:'MTG Deck Builder|'+card.name})%>
+<%-include('components/head',{title:'MTG Deck Builder | '+card.name})%>
 <%-include('components/navigation')%>
-<div class="body-container mlr-auto">
-    <%-include('components/card',{card:card})%>
+
+<div class="flex justify-center my-32">
+    <div class="mlr-auto flex items-center justify-center" id="cardImage">
+        <%-include('components/card',{card:card})%>
+    </div>
+    <div>
+        <table class="table-auto">
+            <tbody>
+                <tr class="bg-gray-200">
+                    <td class="border px-4 py-2"><strong>Name:</strong></td>
+                    <td class="border px-4 py-2"><%=card.name%></td>
+                </tr>
+                <tr>
+                    <td class="border px-4 py-2"><strong>Cost:</strong></td>
+                    <td class="border px-4 py-2" id="cost">
+                        <%=card.cost[0]%>
+                    </td>
+                </tr>
+                <tr class="bg-gray-200">
+                    <td class="border px-4 py-2"><strong>CMC:</strong></td>
+                    <td class="border px-4 py-2"><%=card.cmc%></td>
+                </tr>
+                <tr>
+                    <td class="border px-4 py-2"><strong>Set:</strong></td>
+                    <td class="border px-4 py-2"><%=card.set%></td>
+                </tr>
+                <tr class="bg-gray-200">
+                    <td class="border px-4 py-2"><strong>Type:</strong></td>
+                    <td class="border px-4 py-2"><%=card.type%></td>
+                </tr>
+                <tr>
+                    <td class="border px-4 py-2"><strong>Colors:</strong></td>
+                    <td class="border px-4 py-2" id="colors"><%=card.colors%></td>
+                </tr>
+                <tr class="bg-gray-200">
+                    <td class="border px-4 py-2"><strong>Rarity:</strong></td>
+                    <td class="border px-4 py-2"><%=card.rarity%></td>
+                </tr>
+                <tr>
+                    <td class="border px-4 py-2"><strong>Text:</strong></td>
+                    <td class="border px-4 py-2 max-w-2xl"><%=card.text%></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+<script>
+    $(document).ready(function(){
+        //Resize image
+        $("#cardImage > img").addClass("w-2/3");
+
+        //Add images to colors
+        var colors = $("#colors").text();
+        $("#colors").text(""); 
+        if (colors.includes('G')) {
+            $("#colors").prepend('<img class="float-left mr-1" src="/img/green.png" alt="G">');
+        }
+        if (colors.includes('B')) {
+            $("#colors").prepend('<img class="float-left mr-1" src="/img/black.png" alt="B">');
+        }
+        if (colors.includes('U')) {
+            $("#colors").prepend('<img class="float-left mr-1" src="/img/blue.png" alt="U">');
+        }
+        if (colors.includes('W')) {
+            $("#colors").prepend('<img class="float-left mr-1" src="/img/white.png" alt="W">');
+        }
+        if (colors.includes('R')) {
+            $("#colors").prepend('<img class="float-left mr-1" src="/img/red.png" alt="R">');
+        }
+    });
+</script>
+
 <%- include('components/foot',{ scripts:['navigation'],styles:[]})%>

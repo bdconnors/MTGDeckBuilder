@@ -1,7 +1,7 @@
 <%-include('./components/head',{title:'MTG Deck Builder|Home'})%>
 <%-include('./components/navigation',{session:session})%>
-<div class="body-container">
-    <h1><%=deck.name%></h1>
+<div class="body-container" style="text-align: center;">
+    <h1 class="mt-12 text-lg font-semibold"><%=deck.name%></h1>
 </div>
 <%if(deck.cards.length > 0){%>
 <div class="container">
