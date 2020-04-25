@@ -17,7 +17,9 @@ class Repository {
     async create(values){
         try {
             const result = await this.database.execute('CREATE',this.table,values);
+            console.log(result);
             values.id = result[0][0].id;
+
             return await this.make(values);
         }catch (e) {
             throw new Error(e)

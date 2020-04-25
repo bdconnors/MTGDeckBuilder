@@ -1,23 +1,40 @@
-<div class="row">
-    <%for(let i = 0; i < cards.length; i++){%>
-        <div class="column col-xs-9" id="sidebar">
-            <%console.log(cards[i])%>
-            <h3><%=cards[i].card.name%> x <%=cards[i].copies%></h3>
-            <%-include('./card',{card:cards[i].card})%>
-            <%-include('./form/button',{
-            id:"addCopy"+cards[i].card.id,
-                type:"button",
-                cssClass:["btn","btn-success"],
-                label:"Add Copy",
-                icon:"plus"
-            });%>
-            <%-include('./form/button',{
-                id:"removeCopy"+cards[i].card.id,
-                type:"button",
-                cssClass:["btn","btn-danger"],
-                label:"Remove Copy",
-                icon:"minus"
-            });%>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <b>Total Cards:</b> <%=deck.getCardTotal()%>
         </div>
-    <%}%>
+        <div class="col-sm-3">
+        </div>
+        <div class="col-sm-3">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <b>Copies</b>
+        </div>
+        <div class="col-sm-3">
+            <b>Name</b>
+        </div>
+        <div class="col-sm-3">
+            <b>Mana Cost</b>
+        </div>
+    </div>
+<%for(let i = 0; i < deck.cards.length; i++){
+    const slot = deck.cards[i];%>
+    <div class="row">
+        <div class="col-sm-3">
+            <%=slot.copies%>
+        </div>
+        <div class="col-sm-3">
+            <a href="/cards/<%=slot.card.id%>"><%=slot.card.name%></a>
+        </div>
+        <div class="col-sm-3 mana-symbol-col">
+            <%for(let i = 0; i < slot.card.cost.length; i++){
+                const manaSymbol = slot.card.cost[i];
+            %>
+                <img class="mana-symbol-sprite" src="<%=manaSymbol.svg_uri%>"/>
+            <%}%>
+        </div>
+    </div>
+<%}%>
 </div>

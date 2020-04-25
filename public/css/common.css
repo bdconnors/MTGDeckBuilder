@@ -61,7 +61,16 @@
     text-align: center;
     display: block;
 }
-
+.mana-symbol-col{
+    vertical-align:text-top;
+}
+.mana-symbol-sprite{
+    width:15px;
+    height:15px;
+    vertical-align: middle;
+    margin-left:1px;
+    border:0;
+}
 @media only screen and (min-width: 660px){
     .card-grid-item{
         width: 32.75%;

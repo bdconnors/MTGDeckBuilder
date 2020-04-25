@@ -1,5 +1,6 @@
 const Repository = require('./Repository.js');
 const Deck = require('../../models').Deck;
+const DeckSlot = require('../../models').DeckSlot;
 
 class DeckRepository extends Repository{
 
@@ -10,16 +11,25 @@ class DeckRepository extends Repository{
     async retrieve(values){
         try {
             const deck = await super.retrieve(values);
-            deck.cards = await this.getCards(deck.id);
             return await this.make(deck);
         }catch (e) {
             console.log(e);
             throw new Error(e);
         }
     }
-    async getCards(id){
+    async addDeckSlot(deckId,cardId,copies){
+        try{
+            const results = await this.database.execute('CREATE','DECK_CARD', {deck:deckId,card:cardId,copies:copies});
+            return results[0];
+        }catch (e) {
+            throw new Error(e);
+        }
+    }
+    async getDeckSlots(id){
         try {
-            return await this.cards.getDeckCards(id);
+            const results = await this.database.execute('RETRIEVE', 'ALL_DECK_CARD', {deck: id});
+            const rows = results[0];
+            return await this.makeManyDeckSlots(rows);
         }catch (e) {
             throw new Error(e);
         }
@@ -34,17 +44,30 @@ class DeckRepository extends Repository{
             throw new Error(e);
         }
     }
-    async addCard(deckId,cardId,copies){
-        try{
-            await this.cards.create({deck:deckId,card:cardId,copies:copies});
-            return await this.retrieve({id:deckId});
-        }catch (e) {
-            throw new Error(e);
+    async makeManyDeckSlots(data){
+        const slots = [];
+        for(let i = 0; i < data.length; i++){
+            const slot = await this.makeDeckSlot(data[i]);
+            slots.push(slot);
         }
+        return slots;
+    }
+    async makeDeckSlot(data){
+        const results =  await this.cards.retrieve({id:data.card});
+        const copies = data.copies;
+        return new DeckSlot(results.results[0],copies);
+    }
+    async makeMany(data){
+        const decks = [];
+        for(let i = 0; i < data.length; i++){
+            const deck = await this.make(data[i]);
+            decks.push(deck);
+        }
+        return decks;
     }
     async make(data){
         try {
-            const cards = await this.getCards(data.id);
+            const cards = await this.getDeckSlots(data.id);
             return new Deck(data.id, data.user, data.name, cards);
         }catch (e) {
             throw new Error(e);
