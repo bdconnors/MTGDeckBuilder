@@ -1,0 +1,20 @@
+<form id="editDeckForm" class="hide-container" method="PUT" action="/edit" onsubmit="return deck.submitChanges">
+    <input name="changes" type="hidden" value="[]">
+    <%-include('form/buttonGroup',{
+            id:"editDeckFormControl",
+            buttons:[{
+            id:"saveEditButton",
+            type:"submit",
+            cssClass:["btn","btn-secondary"],
+            label:"Save",
+            icon:"pencil"
+        },
+        {
+            id:"cancelEditButton",
+            type:"reset",
+            cssClass:["btn","btn-danger"],
+            label:"Cancel",
+            icon:"minus"
+        }]
+    })%>
+</form>
