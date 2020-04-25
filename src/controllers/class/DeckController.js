@@ -15,16 +15,8 @@ class DeckController extends Controller{
             return res.render('decksIndex',{session:req.session,decks:decks});
         }
     }
-    async addCard(req,res){
-        try{
-            const deckId = req.params.id;
-            const cardId = req.body.card;
-            const copies = req.body.copies;
-            await this.service.addCard(deckId,cardId,copies);
-            res.redirect(`/decks/${deckId}`);
-        }catch (e) {
-            throw new Error(e);
-        }
+    async editDeck(req,res){
+
     }
     async newDeck(req,res){
         try{

@@ -4,35 +4,14 @@
     <h1><%=deck.name%></h1>
     <%if(session.user){%>
         <%if(session.user.id === deck.user){%>
-            <%-include('components/form/buttonGroup',{
-                id:"defaultStateButtons",
-                hidden:false,
-                buttons:[{
-                    id:"editDeckButton",
-                    type:"button",
-                    cssClass:["btn","btn-secondary"],
-                    label:"Edit",
-                    icon:"pencil"
-                }]
+            <%-include('components/form/button',{
+                id:"editDeckButton",
+                type:"button",
+                cssClass:["btn","btn-secondary"],
+                label:"Edit",
+                icon:"pencil"
             })%>
-            <%-include('components/form/buttonGroup',{
-                id:"editStateButtons",
-                hidden:true,
-                buttons:[{
-                    id:"saveEditButton",
-                    type:"button",
-                    cssClass:["btn","btn-secondary"],
-                    label:"Save",
-                    icon:"pencil"
-                },
-                {
-                    id:"cancelEditButton",
-                    type:"button",
-                    cssClass:["btn","btn-danger"],
-                    label:"Cancel",
-                    icon:"minus"
-                }]
-            })%>
+            <%-include('components/editDeckForm',{deck:deck})%>
         <%}%>
     <%}%>
 </div>
