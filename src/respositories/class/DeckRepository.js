@@ -54,8 +54,9 @@ class DeckRepository extends Repository{
     }
     async makeDeckSlot(data){
         const results =  await this.cards.retrieve({id:data.card});
+        const card = results.results[0];
         const copies = data.copies;
-        return new DeckSlot(results.results[0],copies);
+        return new DeckSlot(card,copies);
     }
     async makeMany(data){
         const decks = [];
