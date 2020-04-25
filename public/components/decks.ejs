@@ -1,36 +1,11 @@
-<div class="body-container mlr-auto" style="text-align:center;">
-    <table>
-        <tbody>
-<%      const deckCount = decks.length;
-        const rows = Math.floor(deckCount/4);
-        const hasOrphanDecks = deckCount % 4 !== 0;
-        var currentDeck = 0;
-
-        for(let i = 0; i < rows; i++){
-%>          <tr>
-<%              for(let i = 0; i < 4; i++){
-%>                  <td>
-                        <a class="mx-auto" href="/deck/<%=decks[currentDeck].id%>">
-                            <%=decks[currentDeck].name%>
-                        </a>
-                    </td>
-<%                  currentDeck++;
-                }
-%>          </tr>
-<%              }
-        if(hasOrphanDecks){
-%>
-            <tr>
-<%              for(let i = currentDeck; i < decks.length; i++){
-%>                  <td>
-                        <a class="mx-auto" href="/decks/<%=decks[currentDeck].id%>">
-                            <%=decks[currentDeck].name%>
-                        </a>
-                    </td>
-<%              }
-%>         </tr>
-<%
-        }
-%>      </tbody>
-    </table>
+<div class="body-container card-grid">
+    <div class="card-grid-inner">
+        <%for(let i = 0; i < decks.length; i++){%>
+        <div class="card-grid-item">
+            <a href="/decks/<%=decks[i].id%>">
+                <%=decks[i].name%>
+            </a>
+        </div>
+        <%}%>
+    </div>
 </div>

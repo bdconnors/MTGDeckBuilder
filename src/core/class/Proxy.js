@@ -40,10 +40,15 @@ class Proxy{
         return result;
     }
     buildURL(query){
+        console.log(query);
+        console.log(process.env.PROXY_BASE);
         let url = process.env.PROXY_BASE; //link to the api
+        console.log(url);
         if(query.id){
+            console.log('has id');
             url+= query.id; //adds an id the end of the query
         }else{
+            console.log('no id');
             let page = 1;
             if(query.page){page = query.page;}
             url += process.env.PROXY_SEARCH_BASE + page;
@@ -52,10 +57,12 @@ class Proxy{
                 url += process.env.PROXY_QUERY_PARAM_NAME + query.name;
             }
         }
+        console.log(url);
         //console.log(url); //checking what is sent to the db
         return url;
     }
     async api(url){
+        console.log(url);
         return await axios.get(url).then((response)=>{
           return response;
         }).catch((e)=>{

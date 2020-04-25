@@ -2,23 +2,38 @@
 <%-include('./components/navigation',{session:session})%>
 <div class="body-container">
     <h1><%=deck.name%></h1>
-    <%if(session.user.id === deck.user){%>
-        <%-include('components/form/buttonGroup',{
-            buttons:[{
-                id:"editDeckButton",
-                type:"button",
-                cssClass:["btn","btn-secondary"],
-                label:"Edit",
-                icon:"pencil"
-            },
-            {
-                id:"deleteDeckButton",
-                type:"button",
-                cssClass:["btn","btn-danger"],
-                label:"Delete",
-                icon:"minus"
-            }]
-        })%>
+    <%if(session.user){%>
+        <%if(session.user.id === deck.user){%>
+            <%-include('components/form/buttonGroup',{
+                id:"defaultStateButtons",
+                hidden:false,
+                buttons:[{
+                    id:"editDeckButton",
+                    type:"button",
+                    cssClass:["btn","btn-secondary"],
+                    label:"Edit",
+                    icon:"pencil"
+                }]
+            })%>
+            <%-include('components/form/buttonGroup',{
+                id:"editStateButtons",
+                hidden:true,
+                buttons:[{
+                    id:"saveEditButton",
+                    type:"button",
+                    cssClass:["btn","btn-secondary"],
+                    label:"Save",
+                    icon:"pencil"
+                },
+                {
+                    id:"cancelEditButton",
+                    type:"button",
+                    cssClass:["btn","btn-danger"],
+                    label:"Cancel",
+                    icon:"minus"
+                }]
+            })%>
+        <%}%>
     <%}%>
 </div>
 <%if(deck.cards.length > 0){%>

@@ -21,8 +21,8 @@
     </div>
 <%for(let i = 0; i < deck.cards.length; i++){
     const slot = deck.cards[i];%>
-    <div class="row">
-        <div class="col-sm-3">
+    <div class="row card-row">
+        <div id="<%=slot.card.id%>" class="card-copies col-sm-3">
             <%=slot.copies%>
         </div>
         <div class="col-sm-5">
