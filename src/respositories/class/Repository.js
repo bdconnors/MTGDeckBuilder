@@ -50,13 +50,8 @@ class Repository {
     }
     async delete(values){
         try {
-            let success = false;
             const result = await this.database.execute('DELETE',this.table,values);
-            const effected = result[0][0];
-            if(effected > 1){
-                success = true;
-            }
-            return success;
+            return result.affectedRows;
         }catch (e) {
             throw new Error(e);
         }

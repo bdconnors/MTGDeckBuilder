@@ -17,6 +17,7 @@ module.exports ={
             {method:'get',path:'/decks',endpoint:'index'},
             {method:'get',path:'/decks/:id',endpoint:'deckProfile'},
             {method:'put',path:'/decks/:id/edit',endpoint:'editDeck'},
+            {method:'delete',path:'/decks/:id/delete',endpoint:'deleteDeck'},
             {method:'post',path:'/decks',endpoint:'newDeck'}
         ]
 

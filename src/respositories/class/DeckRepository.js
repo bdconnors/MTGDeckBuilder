@@ -17,13 +17,22 @@ class DeckRepository extends Repository{
             throw new Error(e);
         }
     }
-    async addDeckSlot(deckId,cardId,copies){
-        try{
-            const results = await this.database.execute('CREATE','DECK_CARD', {deck:deckId,card:cardId,copies:copies});
-            return results[0];
-        }catch (e) {
-            throw new Error(e);
+    async updateCards(deckId,modifications){
+        let results = [];
+        for(let i = 0; i < modifications.length; i++){
+            const modification = modifications[i];
+            let action = modification.action.toUpperCase();
+            let values;
+            let result;
+            if(modification.action === "delete"){
+                values = {deck:deckId,card:modification.card};
+            }else{
+                values = {deck:deckId,card:modification.card,quantity:modification.quantity};
+            }
+            result = await this.database.execute(action,"DECK_CARD",values);
+            results.push(result);
         }
+        return results;
     }
     async getDeckSlots(id){
         try {
