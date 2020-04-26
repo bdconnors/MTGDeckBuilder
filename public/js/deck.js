@@ -8,6 +8,7 @@ let addCardInput;
 let addCardSubmit;
 let addCardQuantity;
 let autoComplete;
+let deckContents;
 
 let modifications;
 
@@ -26,7 +27,9 @@ $(document).ready(()=>{
         addCardSubmit = $("#addCardSearchSubmit");
         addCardInput = $("#addCardSearch");
         addCardQuantity = $("#addCardQuantity");
-        modifications = new DeckEdits();
+        deckContents = $("#originalDeckContents");
+        const cards = JSON.parse(deckContents.val());
+        modifications = new DeckEdits(cards);
         editBtn.on('click',modifications.enable.bind(modifications));
         cancelBtn.on('click',modifications.cancel.bind(modifications));
         saveBtn.on('click',modifications.submitChanges.bind(modifications));
@@ -40,22 +43,48 @@ const deck = {
 };
 
 class DeckEdits{
-    constructor(edits = []){
+    constructor(originalContents,edits = []){
+        this.originalContents = originalContents;
+        console.log(this.originalContents);
         this.edits = edits;
     }
     add(e){
+        const notLegalErr = $("#cardNotLegalErr");
+        notLegalErr.addClass("hide-container");
         let value = addCardInput.val();
         this.getCard(value).then((response)=>{
-            let cardId = response.results[0].id;
-            const previousEdit = this.edits.find((edit)=>{
-                return edit.card === cardId;
-            });
-            if(!previousEdit){
-                this.edits.push({card: cardId,action: "create", quantity: 1});
-                this.addToView(response.results[0]);
+            if(response.results.length === 0){
+                notLegalErr.removeClass("hide-container");
+            }else {
+                let cardId = response.results[0].id;
+                const existingCard = this.existsInDeck(cardId);
+                const previousModification = this.getModification(cardId);
+                if(existingCard && !previousModification){
+                    const quantity = existingCard.copies + 1;
+                    this.addModification(cardId,"update",quantity);
+                }else if(existingCard && previousModification){
+                    if(previousModification.action === "update"){
+                        const quantity = previousModification.quantity + 1;
+                        if(existingCard.copies === quantity) {
+                            this.removeModification(cardId);
+                        }else{
+                            previousModification.quantity = quantity;
+                        }
+                    }else if(previousModification.action === "delete"){
+                        previousModification.action = "update";
+                        previousModification.quantity = 1;
+                    }
+                }else{
+                    this.addModification(cardId,"create",1);
+                    this.addToView(response.results[0]);
+                }
             }
         });
         console.log(this.edits);
+    }
+    removeFromView(cardId){
+        const row = $(`#${cardId}_row`);
+        row.addClass("hide-container");
     }
     addToView(card){
         const deckContentsTable = $("#deckContentsTable");
@@ -85,32 +114,93 @@ class DeckEdits{
             }).done((response)=>{res(response)});
         });
     }
-    modify(e){
-        let action;
-        const quantity = Number(e.target.value);
-        const cardId = e.target.id;
-        console.log(quantity);
-        console.log(quantity === 0);
-        if(quantity === 0){
-            action = "delete";
-        }else{
-            action = "update";
-        }
-        const previousEdit = this.edits.find((edit)=>{
-            return edit.card === cardId;
-        });
-        if(previousEdit){
-            if(previousEdit.action !== "create") {
-                previousEdit.action = action;
+    existsInDeck(cardId){
+        let result = false;
+        for(let i = 0; i <this.originalContents.length; i++){
+            const card = this.originalContents[i];
+            if(card.card.id === cardId){
+                result = card;
             }
-            previousEdit.quantity = quantity;
-        }else {
-            this.edits.push({card:cardId,action:action,quantity:quantity});
+        }
+        return result;
+    }
+    getModification(cardId){
+        console.log(cardId);
+        let result = false;
+        for(let i = 0; i < this.edits.length; i++){
+            if(this.edits[i] !== null){
+                if(this.edits[i].card === cardId) {
+                    result = this.edits[i];
+                }
+            }
+        }
+        return result;
+    }
+    modify(e){
+
+        let action;
+
+        const cardId = e.target.id;
+        const quantity = Number(e.target.value);
+        const existingCard = this.existsInDeck(cardId);
+        console.log(existingCard);
+        const previousModification = this.getModification(cardId);
+        console.log(previousModification);
+
+        if(!previousModification) {
+            if (existingCard && quantity === 0) {
+                action = "delete";
+                this.addModification(cardId, action, quantity);
+                this.removeFromView(cardId);
+            } else if (existingCard && quantity !== existingCard.copies) {
+                action = "update";
+                this.addModification(cardId, action, quantity);
+            }
+        }else{
+            if(previousModification && existingCard && quantity === existingCard.copies){
+                this.removeModification(cardId);
+            }else if(previousModification && existingCard && quantity === 0){
+                previousModification.action = "delete";
+                delete previousModification.quantity;
+                this.removeFromView(cardId);
+            }else if(previousModification && existingCard && quantity !== previousModification.quantity){
+                previousModification.action = "update";
+                previousModification.quantity = quantity;
+            }else if(previousModification && !existingCard && previousModification.action === "create"){
+                if(quantity === 0){
+                    this.removeModification(cardId);
+                    this.removeFromView(cardId);
+                }else if(quantity !== previousModification.quantity){
+                    previousModification.quantity = quantity;
+                }
+            }
         }
         console.log(this.edits);
     }
+    addModification(card,action,quantity){
+        const modification = {card:card,action:action};
+        if(quantity){
+            modification.quantity = quantity;
+        }
+        const nullIndexId = this.edits.indexOf(null);
+        console.log(nullIndexId);
+        if(nullIndexId !== -1){
+            this.edits[nullIndexId] = modification;
+        }else{
+            this.edits.push(modification);
+        }
+    }
+    removeModification(cardId){
+        for(let i = 0; i < this.edits.length; i++){
+            if(this.edits[i] !== null){
+                if(this.edits[i].card === cardId) {
+                    this.edits[i] = null;
+                }
+            }
+        }
+    }
     enable(){
-        const staticValues = this.getStaticCardValues();
+        const staticValues = this.originalContents;
         const inputs = this.createCardInputs(staticValues);
         this.enableInput(inputs);
         this.toggleControls(true);
@@ -142,13 +232,16 @@ class DeckEdits{
         }
     }
     resetInput(){
-        const inputValues = this.getInputCardValues();
+        const inputValues = this.originalContents;
         for(let i = 0; i < inputValues.length; i++) {
             const values = inputValues[i];
-            const containerId =`#${values.card}_value_container`;
+            const containerId =`#${values.card.id}_row`;
             const container = $(containerId);
-            container.empty();
-            container.append(values.copies);
+            container.removeClass("hide-container");
+            const copiesContainer = $(`#${values.card.id}_value_container`);
+            console.log(container);
+            copiesContainer.empty();
+            copiesContainer.append(values.copies);
         }
     }
     enableInput(inputs){
@@ -164,33 +257,11 @@ class DeckEdits{
         const inputs = [];
         for(let i = 0; i < currentCards.length; i++) {
             const card = currentCards[i];
-            const containerId = `#${card.card}_value_container`;
-            const html = `<input id="${card.card}" type="number" min="0" max="4" value="${card.copies}">`;
+            const containerId = `#${card.card.id}_value_container`;
+            const html = `<input id="${card.card.id}" type="number" min="0" max="4" value="${card.copies}">`;
             inputs.push({container:containerId,html:html});
         }
         return inputs;
-    }
-    getInputCardValues(){
-        let values = [];
-        const quantities = document.getElementsByClassName("card-copies");
-        for(let i = 0; i < quantities.length; i++) {
-            const quantity = quantities[i];
-            const input = quantity.getElementsByTagName("input")[0];
-            values.push({card:input.id,copies:input.value});
-        }
-        return values;
-    }
-    getStaticCardValues(){
-        let values = [];
-        const quantities = document.getElementsByClassName("card-copies");
-        for(let i = 0; i < quantities.length; i++) {
-            const quantity = quantities[i];
-            const value = quantity.innerText;
-            const containerId = quantity.id;
-            const cardId = containerId.split("_")[0];
-            values.push({card:cardId,copies:value});
-        }
-        return values;
     }
     removeAddedCards(){
         for(let i = 0; i < this.edits.length; i++) {

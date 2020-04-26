@@ -30,12 +30,18 @@
         </div>
     </div>
 </div>
+<input id="originalDeckContents" type="hidden" value = "<%=JSON.stringify(deck.cards)%>">
 <div class="row hide-container modify-deck-control">
     <form id="editValuesForm" class="hide-container" method="POST" action="/decks/<%=deck.id%>/edit" onsubmit="return modifications.submitChanges">
         <input id="editValuesInput" name="changes" type="hidden" value="[]">
     </form>
     <div id="addCardSearchContainer" class="body-container">
         <form id="addCardSearchForm">
+            <div id="cardNotLegalErr" class="input-group hide-container">
+                <h3 style="color:red">
+                    Card is not legal in Magic The Gathering Standard format
+                </h3>
+            </div>
             <div class="input-group">
                 <input id="addCardSearch" name="name" type="text" class="form-control" placeholder="Search Card to Add">
                 <div class="input-group-append">

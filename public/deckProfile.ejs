@@ -3,24 +3,14 @@
 <div class="body-container" style="text-align: center;">
     <h1 class="mt-12 text-lg font-semibold"><%=deck.name%></h1>
 </div>
-<%if(deck.cards.length > 0){%>
-
-    <%if(session.user){%>
-        <%if(session.user.id === deck.user){%>
-            <div class="container">
-                <%-include('components/editDeckForm',{deck:deck})%>
-            </div>
-        <%}%>
+<%if(session.user){%>
+    <%if(session.user.id === deck.user){%>
+        <div class="container">
+            <%-include('components/editDeckForm',{deck:deck})%>
+        </div>
     <%}%>
-
+<%}%>
 <div class="container">
     <%-include('components/deckContents',{session:session,deck:deck})%>
 </div>
-<%}else{%>
-    <div class="body-container" style="text-align:center;">
-        <p>
-            <b>Deck is empty!</b>
-        </p>
-    </div>
-<%}%>
 <%-include('./components/foot',{scripts:['navigation','deck'],styles:['navigation','deck']})%>
