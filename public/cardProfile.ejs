@@ -15,7 +15,11 @@
                 <tr>
                     <td class="border px-4 py-2"><strong>Cost:</strong></td>
                     <td class="border px-4 py-2" id="cost">
-                        <%=card.cost[0]%>
+                        <%for(let i = 0; i < card.cost.length; i++){
+                            const manaSymbol = card.cost[i];
+                        %>
+                            <img class="mana-symbol-sprite float-left" src="<%=manaSymbol.svg_uri%>"/>
+                        <%}%>
                     </td>
                 </tr>
                 <tr class="bg-gray-200">

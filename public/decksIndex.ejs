@@ -18,17 +18,25 @@
     </p>
 </div>
 <%}else{%>
-    <div class="flex justify-around">
-        <%for(let i = 0; i < decks.length; i++){%>
+<div class="body-container card-grid">
+    <div class="card-grid-inner">
+        <%for(let i = 0; i < decks.length; i++){
+        %>
+        <div class="card-grid-item">
+            <form action="/decks/<%=decks[i].id%>/delete" method="POST">
+                <button type="submit" class="btn btn-danger"><i class="fa fa-minus"> Remove</i></button>
+            </form>
             <a href="/decks/<%=decks[i].id%>">
                 <div class="rounded overflow-hidden shadow-lg zoom" style="max-width: 12rem;">
                     <img src="/img/deck.jpg">
                     <div class="px-2 py-2">
-                      <div class="font-bold text-l mb-2"><%=decks[i].name%></div>
+                        <div class="font-bold text-l mb-2"><%=decks[i].name%></div>
                     </div>
                 </div>
             </a>
+        </div>
         <%}%>
     </div>
+</div>
 <%}%>
 <%-include('./components/foot',{scripts:['navigation','deck'],styles:['navigation']})%>

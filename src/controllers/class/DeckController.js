@@ -18,7 +18,8 @@ class DeckController extends Controller{
     async editDeck(req,res){
         try{
             const deckId = req.params.id;
-            const edits = req.body.edits;
+            const edits = JSON.parse(req.body.changes);
+            console.log(edits);
             await this.service.updateDeck(deckId,edits);
             res.redirect(`/decks/${deckId}`);
         }catch (e) {
