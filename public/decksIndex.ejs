@@ -10,7 +10,6 @@
     icon:"plus",
     clickHandler:""
     });%>
-    <h1>My Decks</h1>
 </div>
 <%if(decks.length === 0) {%>
 <div class="body-container" style="text-align:center;">
@@ -19,6 +18,17 @@
     </p>
 </div>
 <%}else{%>
-    <%-include('./components/decks',{decks:decks})%>
+    <div class="flex justify-around">
+        <%for(let i = 0; i < decks.length; i++){%>
+            <a href="/decks/<%=decks[i].id%>">
+                <div class="rounded overflow-hidden shadow-lg zoom" style="max-width: 12rem;">
+                    <img src="/img/deck.jpg">
+                    <div class="px-2 py-2">
+                      <div class="font-bold text-l mb-2"><%=decks[i].name%></div>
+                    </div>
+                </div>
+            </a>
+        <%}%>
+    </div>
 <%}%>
 <%-include('./components/foot',{scripts:['navigation','deck'],styles:['navigation']})%>

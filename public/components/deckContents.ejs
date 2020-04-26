@@ -1,39 +1,67 @@
+<div class="container flex justify-center">
+    <div>
+        <b>Total Cards:</b> <%=deck.getCardTotal()%>
+        <table class="table-auto">
+            <thead>
+              <tr>
+                <th class="px-4 py-2">Copies</th>
+                <th class="px-4 py-2">Name</th>
+                <th class="px-4 py-2">Mana Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+                <%for(let i = 0; i < deck.cards.length; i++){
+                    const slot = deck.cards[i];%>
+                    <tr>
+                        <td class="border px-4 py-2">
+                            <%=slot.copies%>
+                        </td>
+                        <td class="border px-4 py-2">
+                            <a class="deck-card-name" id="deck-card-name-<%=slot.card.id%>" href="/cards/<%=slot.card.id%>"><%=slot.card.name%></a>
+                        </td>
+                        <td class="border px-4 py-2"> 
+                            <%for(let i = 0; i < slot.card.cost.length; i++){
+                                const manaSymbol = slot.card.cost[i];
+                            %>
+                                <img class="mana-symbol-sprite float-left" src="<%=manaSymbol.svg_uri%>"/>
+                            <%}%>
+                        </td>
+                    </tr>
+                <%}%>
+            </tbody>
+        </table>
+    </div>
 
-    <div class="row">
-        <div class="col-sm-3">
-            <b>Total Cards:</b> <%=deck.getCardTotal()%>
-        </div>
-        <div class="col-sm-5">
-        </div>
-        <div class="col-sm-3">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-3">
-            <b>Copies</b>
-        </div>
-        <div class="col-sm-5">
-            <b>Name</b>
-        </div>
-        <div class="col-sm-3">
-            <b>Mana Cost</b>
-        </div>
-    </div>
-<%for(let i = 0; i < deck.cards.length; i++){
-    const slot = deck.cards[i];%>
-    <div class="row card-row">
-        <div id="<%=slot.card.id%>_value_container" class="card-copies col-sm-3">
-            <%=slot.copies%>
-        </div>
-        <div class="col-sm-5">
-            <a href="/cards/<%=slot.card.id%>"><%=slot.card.name%></a>
-        </div>
-        <div class="col-sm-3 mana-symbol-col">
-            <%for(let i = 0; i < slot.card.cost.length; i++){
-                const manaSymbol = slot.card.cost[i];
-            %>
-                <img class="mana-symbol-sprite" src="<%=manaSymbol.svg_uri%>"/>
-            <%}%>
-        </div>
-    </div>
-<%}%>
+    <%for(let i = 0; i < deck.cards.length; i++){
+        const slot = deck.cards[i];%>
+        <img class="img-fluid absolute hidden deck-card-image" id="deck-card-image-<%=slot.card.id%>" style="top: 6em; left: 1em;" src="<%=slot.card.images.normal%>" alt="<%=slot.card.name%>">
+    <%}%>
+
+</div>
+<script>
+$(document).ready(function(){
+    //Resize image
+    $(".deck-card-image").addClass("w-1/6");
+
+    //Display image when hovered over
+    window.onmouseover=function(e) {
+        var str1 = e.target.className;
+        var str2 = "deck-card-name";
+        if( str1 == str2 ) {
+            var cardID = e.target.id
+            cardID = cardID.replace("deck-card-name-","");
+            $("#deck-card-image-"+cardID).removeClass("hidden");
+        }
+    };
+    window.onmouseout=function(e) {
+        var str1 = e.target.className;
+        var str2 = "deck-card-name";
+        if( str1 == str2 ) {
+            var cardID = e.target.id
+            cardID = cardID.replace("deck-card-name-","");
+            $("#deck-card-image-"+cardID).addClass("hidden");
+        }
+    };
+
+});
+</script>
