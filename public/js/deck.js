@@ -16,11 +16,15 @@ $(document).ready(()=>{
         common.setUpModalForm(ELEMENTS.NAVIGATION.MODAL.NEW_DECK, deck.createNewDeck);
     }
     if(modifyDeckControls.length > 0){
+
         modifications = new DeckEdits();
-        editBtn.on('click',modifications.enable.bind(modifications));
-        cancelBtn.on('click',modifications.cancel.bind(modifications));
-        addBtn.on('click',modifications.showSearchBar.bind(modifications));
-        addSearchForm.on('submit',modifications.addCardSearch.bind(modifications));
+        modifications.loadCards().then(()=>{
+            editBtn.on('click',modifications.enable.bind(modifications));
+            cancelBtn.on('click',modifications.cancel.bind(modifications));
+            addBtn.on('click',modifications.showSearchBar.bind(modifications));
+            addSearchForm.on('submit',modifications.addCardSearch.bind(modifications));
+            console.log(modifications);
+        });
     }
 });
 
@@ -90,21 +94,19 @@ class DeckEdits{
         this.edits = [];
     }
     showSearchBar(){
-        this.getAllCards().then((response)=>{
-            console.log(response);
-            this.allCards = response.results;
-            this.allCardNames = response.results.map((result)=>{
-                return result.name;
-            });
-            console.log(this.allCards);
-            console.log(this.allCardNames);
-            $("#addCardSearchContainer").removeClass("hide-container");
-        });
+        $("#addCardSearchContainer").removeClass("hide-container");
     }
-    async getAllCards(){
-        return await $.ajax({
+    async loadCards(){
+        const response = await $.ajax({
             url:'/api/search',
             method:'GET'});
+
+        console.log(response);
+        this.allCards = response.results;
+        this.allCardNames = response.results.map((result)=>{
+            return result.name;
+        });
+
     }
     addCardSearch(){
         console.log('inside add card search');
