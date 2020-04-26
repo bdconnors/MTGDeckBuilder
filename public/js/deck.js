@@ -2,6 +2,7 @@ let modifyDeckControls;
 let editBtn;
 let cancelBtn;
 let addBtn;
+let addSearchForm;
 
 let modifications;
 
@@ -10,6 +11,7 @@ $(document).ready(()=>{
     editBtn = $("#modifyDeckEditBtn");
     cancelBtn = $("#modifyDeckResetBtn");
     addBtn = $("#modifyDeckAddCardBtn");
+    addSearchForm = $("#addCardSearchForm");
     if($(ELEMENTS.NAVIGATION.MODAL.NEW_DECK).length > 0) {
         common.setUpModalForm(ELEMENTS.NAVIGATION.MODAL.NEW_DECK, deck.createNewDeck);
     }
@@ -18,6 +20,7 @@ $(document).ready(()=>{
         editBtn.on('click',modifications.enable.bind(modifications));
         cancelBtn.on('click',modifications.cancel.bind(modifications));
         addBtn.on('click',modifications.showSearchBar.bind(modifications));
+        addSearchForm.on('submit',modifications.addCardSearch.bind(modifications));
     }
 });
 
@@ -29,6 +32,7 @@ const deck = {
 class DeckEdits{
     constructor(edits = []){
         this.edits = edits;
+        this.allCards = [];
     }
     modify(e){
         let action;
@@ -85,12 +89,21 @@ class DeckEdits{
         this.edits = [];
     }
     showSearchBar(){
-        $("#addCardSearchContainer").removeClass("hide-container");
+        this.getAllCards().then((response)=>{
+            console.log(response);
+            this.allCards = response.results;
+            console.log(this.allCards);
+            $("#addCardSearchContainer").removeClass("hide-container");
+        });
     }
     async getAllCards(){
         return await $.ajax({
-            url:'/api/cards',
+            url:'/api/search',
             method:'GET'});
+    }
+    addCardSearch(){
+        console.log('inside add card search');
+        return false;
     }
     submitChanges(){
         return false;
