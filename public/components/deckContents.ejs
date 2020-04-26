@@ -13,7 +13,7 @@
                 <%for(let i = 0; i < deck.cards.length; i++){
                     const slot = deck.cards[i];%>
                     <tr>
-                        <td class="border px-4 py-2">
+                        <td id="<%=slot.card.id%>_value_container" class="border px-4 py-2 card-copies">
                             <%=slot.copies%>
                         </td>
                         <td class="border px-4 py-2">
