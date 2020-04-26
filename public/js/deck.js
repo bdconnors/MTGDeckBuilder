@@ -1,6 +1,7 @@
 let modifyDeckControls;
 let editBtn;
 let cancelBtn;
+let addBtn;
 
 let modifications;
 
@@ -8,11 +9,15 @@ $(document).ready(()=>{
     modifyDeckControls= $("#modifyDeckControls");
     editBtn = $("#modifyDeckEditBtn");
     cancelBtn = $("#modifyDeckResetBtn");
-    common.setUpModalForm(ELEMENTS.NAVIGATION.MODAL.NEW_DECK,deck.createNewDeck);
+    addBtn = $("#modifyDeckAddCardBtn");
+    if($(ELEMENTS.NAVIGATION.MODAL.NEW_DECK).length > 0) {
+        common.setUpModalForm(ELEMENTS.NAVIGATION.MODAL.NEW_DECK, deck.createNewDeck);
+    }
     if(modifyDeckControls.length > 0){
         modifications = new DeckEdits();
         editBtn.on('click',modifications.enable.bind(modifications));
         cancelBtn.on('click',modifications.cancel.bind(modifications));
+        addBtn.on('click',modifications.showSearchBar.bind(modifications));
     }
 });
 
@@ -78,6 +83,14 @@ class DeckEdits{
         $("#modifyDeckControls").addClass("hide-container");
         $("#modifyDeckShow").removeClass("hide-container");
         this.edits = [];
+    }
+    showSearchBar(){
+        $("#addCardSearchContainer").removeClass("hide-container");
+    }
+    async getAllCards(){
+        return await $.ajax({
+            url:'/api/cards',
+            method:'GET'});
     }
     submitChanges(){
         return false;
