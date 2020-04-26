@@ -13,9 +13,16 @@ class DeckService extends Service{
             throw new Error('deck not found');
         }
     }
-    async editDeck(values){
+    async editDeck(deckId,modifications){
         try{
-
+            await this.repo.updateCards(deckId,modifications);
+        }catch (e) {
+            throw new Error(e);
+        }
+    }
+    async deleteDeck(deckId){
+        try{
+            await this.repo.delete({deck:deckId});
         }catch (e) {
             throw new Error(e);
         }

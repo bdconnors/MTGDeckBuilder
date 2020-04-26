@@ -16,7 +16,26 @@ class DeckController extends Controller{
         }
     }
     async editDeck(req,res){
-
+        try{
+            const deckId = req.params.id;
+            const edits = req.body.edits;
+            await this.service.updateDeck(deckId,edits);
+            res.redirect(`/decks/${deckId}`);
+        }catch (e) {
+            res.status(500);
+            res.send("error editing deck");
+        }
+    }
+    async deleteDeck(req,res){
+        try{
+            const deckId = req.params.id;
+            await this.service.deleteDeck(deckId);
+            res.redirect('/decks');
+        }catch (e) {
+            console.log(e);
+            res.status(500);
+            res.send("error deleting deck");
+        }
     }
     async newDeck(req,res){
         try{

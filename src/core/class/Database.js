@@ -23,7 +23,9 @@ class Database {
             const params = this.getParams(values);
             console.log(params);
             this.conn.execute(procedure,params,(err,res,fields)=>{
-                if(err){reject(err);}
+                if(err){
+                    console.log(err);
+                    reject(err);}
                 resolve(res);
             });
         });
