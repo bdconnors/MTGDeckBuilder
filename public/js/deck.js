@@ -1,4 +1,5 @@
 let modifyDeckControls;
+let saveBtn;
 let editBtn;
 let cancelBtn;
 let addBtn;
@@ -12,11 +13,13 @@ let modifications;
 
 $(document).ready(()=>{
     modifyDeckControls= $("#modifyDeckControls");
+    console.log(modifyDeckControls);
     if($(ELEMENTS.NAVIGATION.MODAL.NEW_DECK).length > 0) {
         common.setUpModalForm(ELEMENTS.NAVIGATION.MODAL.NEW_DECK, deck.createNewDeck);
     }
     if(modifyDeckControls.length > 0){
         editBtn = $("#modifyDeckEditBtn");
+        saveBtn = $("#modifyDeckSaveBtn");
         cancelBtn = $("#modifyDeckResetBtn");
         addBtn = $("#modifyDeckAddCardBtn");
         addSearchForm = $("#addCardSearchForm");
@@ -26,7 +29,7 @@ $(document).ready(()=>{
         modifications = new DeckEdits();
         editBtn.on('click',modifications.enable.bind(modifications));
         cancelBtn.on('click',modifications.cancel.bind(modifications));
-        addBtn.on('click',modifications.showSearchBar.bind(modifications));
+        saveBtn.on('click',modifications.submitChanges.bind(modifications));
     }
 });
 
@@ -42,17 +45,36 @@ class DeckEdits{
     }
     add(e){
         let value = addCardInput.val();
-        let quantity = addCardQuantity.val();
         this.getCard(value).then((response)=>{
             let cardId = response.results[0].id;
             const previousEdit = this.edits.find((edit)=>{
                 return edit.card === cardId;
             });
             if(!previousEdit){
-                this.edits.push({card: cardId,action: "create", quantity: quantity});
+                this.edits.push({card: cardId,action: "create", quantity: 1});
+                this.addToView(response.results[0]);
             }
         });
         console.log(this.edits);
+    }
+    addToView(card){
+        const deckContentsTable = $("#deckContentsTable");
+        let html = `<tr id="${card.id}_row">
+                        <td id="${card.id}_value_container" class="border px-4 py-2 card-copies">
+                            <input id="${card.id}" type="number" min="0" max="4" value="1">
+                        </td>
+                        <td class="border px-4 py-2">
+                            <a class="deck-card-name" id="deck-card-name-${card.id}" href="/cards/${card.id}">${card.name}</a>
+                        </td>
+                        <td class="border px-4 py-2">`;
+                            for(let i = 0; i < card.cost.length; i++){
+                                const manaSymbol = card.cost[i];
+                                html+=`<img class="mana-symbol-sprite float-left" src="${manaSymbol.svg_uri}"/>`;
+                            }
+                        html+=`</td>
+                    </tr>`;
+        deckContentsTable.append(html);
+        $(`#${card.id}`).on('keyup mouseup',this.modify.bind(this));
     }
     getCard(name){
         return new Promise((res,rej)=>{
@@ -78,7 +100,9 @@ class DeckEdits{
             return edit.card === cardId;
         });
         if(previousEdit){
-            previousEdit.action = action;
+            if(previousEdit.action !== "create") {
+                previousEdit.action = action;
+            }
             previousEdit.quantity = quantity;
         }else {
             this.edits.push({card:cardId,action:action,quantity:quantity});
@@ -86,46 +110,103 @@ class DeckEdits{
         console.log(this.edits);
     }
     enable(){
+        const staticValues = this.getStaticCardValues();
+        const inputs = this.createCardInputs(staticValues);
+        this.enableInput(inputs);
+        this.toggleControls(true);
+    }
+    cancel(){
+        this.removeAddedCards();
+        this.resetInput();
+        this.toggleControls(false);
+    }
+    toggleControls(active){
+        const controls = document.getElementsByClassName("modify-deck-control");
+        console.log(controls);
+        for(let i = 0; i < controls.length; i++){
+            const control = controls[i];
+            if(active) {
+                control.classList.remove("hide-container");
+            }else{
+                control.classList.add("hide-container");
+            }
+        }
+        if(active){
+            $("#modifyDeckShow").addClass("hide-container");
+            const searchBar = document.getElementById("addCardSearch");
+            const submitBtn = document.getElementById("addCardSearchSubmit");
+            autoComplete = new AutoComplete(searchBar);
+            submitBtn.addEventListener('click',this.add.bind(this));
+        }else{
+            $("#modifyDeckShow").removeClass("hide-container");
+        }
+    }
+    resetInput(){
+        const inputValues = this.getInputCardValues();
+        for(let i = 0; i < inputValues.length; i++) {
+            const values = inputValues[i];
+            const containerId =`#${values.card}_value_container`;
+            const container = $(containerId);
+            container.empty();
+            container.append(values.copies);
+        }
+    }
+    enableInput(inputs){
+        for(let i = 0; i < inputs.length; i++){
+            const input = inputs[i];
+            const container = $(input.container);
+            container.empty();
+            container.append(input.html);
+            container.on('keyup mouseup',this.modify.bind(this));
+        }
+    }
+    createCardInputs(currentCards){
+        const inputs = [];
+        for(let i = 0; i < currentCards.length; i++) {
+            const card = currentCards[i];
+            const containerId = `#${card.card}_value_container`;
+            const html = `<input id="${card.card}" type="number" min="0" max="4" value="${card.copies}">`;
+            inputs.push({container:containerId,html:html});
+        }
+        return inputs;
+    }
+    getInputCardValues(){
+        let values = [];
+        const quantities = document.getElementsByClassName("card-copies");
+        for(let i = 0; i < quantities.length; i++) {
+            const quantity = quantities[i];
+            const input = quantity.getElementsByTagName("input")[0];
+            values.push({card:input.id,copies:input.value});
+        }
+        return values;
+    }
+    getStaticCardValues(){
+        let values = [];
         const quantities = document.getElementsByClassName("card-copies");
         for(let i = 0; i < quantities.length; i++) {
             const quantity = quantities[i];
             const value = quantity.innerText;
             const containerId = quantity.id;
             const cardId = containerId.split("_")[0];
-            const element = $(`#${containerId}`);
-            console.log(element.length);
-            element.empty();
-            element.append(`<input id="${cardId}" type="number" min="0" max="4" value="${value}">`);
-            $(`#${cardId}`).bind('keyup mouseup',this.modify.bind(this));
+            values.push({card:cardId,copies:value});
         }
-        $("#modifyDeckControls").removeClass("hide-container");
-        $("#modifyDeckShow").addClass("hide-container");
+        return values;
     }
-    cancel(){
-        const quantities = document.getElementsByClassName("card-copies");
-        for(let i = 0; i < quantities.length; i++) {
-            const quantity = quantities[i];
-            const containerId = quantity.id;
-            const cardId = containerId.split("_")[0];
-            const input = $(`#${cardId}`);
-            const inputVal = input.attr('value');
-            const element = $(`#${cardId}_value_container`);
-            element.empty();
-            quantity.append(inputVal);
+    removeAddedCards(){
+        for(let i = 0; i < this.edits.length; i++) {
+            const cardId = this.edits[i].card;
+            if(this.edits[i].action === "create") {
+                const cardRow = $(`#${cardId}_row`);
+                cardRow.remove();
+            }
         }
-        $("#modifyDeckControls").addClass("hide-container");
-        $("#modifyDeckShow").removeClass("hide-container");
-        this.edits = [];
     }
-    async showSearchBar(){
-        $("#addCardSearchContainer").removeClass("hide-container");
-        const searchBar = document.getElementById("addCardSearch");
-        const submitBtn = document.getElementById("addCardSearchSubmit");
-        autoComplete = new AutoComplete(searchBar);
-        submitBtn.addEventListener('click',this.add.bind(this));
-    }
-    submitChanges(){
-        return false;
+    async submitChanges(){
+        const values = JSON.stringify(this.edits);
+        const hiddenForm = $("#editValuesForm");
+        const hiddenValueInput = $("#editValuesInput");
+        hiddenValueInput.val(values);
+        hiddenForm.submit();
     }
 
 }

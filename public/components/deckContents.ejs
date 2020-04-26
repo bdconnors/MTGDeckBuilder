@@ -9,10 +9,10 @@
                 <th class="px-4 py-2">Mana Cost</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="deckContentsTable">
                 <%for(let i = 0; i < deck.cards.length; i++){
                     const slot = deck.cards[i];%>
-                    <tr>
+                    <tr id="<%=slot.card.id%>_row">
                         <td id="<%=slot.card.id%>_value_container" class="border px-4 py-2 card-copies">
                             <%=slot.copies%>
                         </td>
