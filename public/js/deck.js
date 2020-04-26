@@ -33,6 +33,7 @@ class DeckEdits{
     constructor(edits = []){
         this.edits = edits;
         this.allCards = [];
+        this.allCardNames = [];
     }
     modify(e){
         let action;
@@ -92,7 +93,11 @@ class DeckEdits{
         this.getAllCards().then((response)=>{
             console.log(response);
             this.allCards = response.results;
+            this.allCardNames = response.results.map((result)=>{
+                return result.name;
+            });
             console.log(this.allCards);
+            console.log(this.allCardNames);
             $("#addCardSearchContainer").removeClass("hide-container");
         });
     }
