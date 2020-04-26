@@ -10,6 +10,7 @@ module.exports ={
         ],
         CARDS:[
             {method:'get',path:'/cards',endpoint:'index'},
+            {method:'get',path:'/api/search',endpoint:'search'},
             {method:'get',path:'/cards/:id',endpoint:'profile'},
         ],
         DECKS:[
