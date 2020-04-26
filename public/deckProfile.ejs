@@ -4,12 +4,16 @@
     <h1 class="mt-12 text-lg font-semibold"><%=deck.name%></h1>
 </div>
 <%if(deck.cards.length > 0){%>
-<div class="container">
+
     <%if(session.user){%>
         <%if(session.user.id === deck.user){%>
-            <%-include('components/editDeckForm')%>
+            <div class="container">
+                <%-include('components/editDeckForm',{deck:deck})%>
+            </div>
         <%}%>
     <%}%>
+
+<div class="container">
     <%-include('components/deckContents',{session:session,deck:deck})%>
 </div>
 <%}else{%>
