@@ -4,10 +4,17 @@ class CardService extends Service{
     constructor(repo){
         super(repo);
     }
+    async autoCompleteName(query){
+        const suggestions =  await this.repo.suggestNames(query);
+        return suggestions;
+    }
+    async getCardByExactName(name){
+        const preparedName = name.split(' ').join('+');
+        return await this.repo.retrieveExactNameMatch(preparedName);
+    }
     async search(query){
-        const result = await this.repo.retrieve(query); //returns searchResults object
-        console.log('search() from card service done');
-        return result;
+         //returns searchResults object
+        return await this.repo.retrieve(query);
     }
 }
 module.exports = CardService;

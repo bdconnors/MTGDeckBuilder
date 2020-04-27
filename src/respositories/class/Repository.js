@@ -22,6 +22,7 @@ class Repository {
 
             return await this.make(values);
         }catch (e) {
+            console.log(e);
             throw new Error(e)
         }
     }
