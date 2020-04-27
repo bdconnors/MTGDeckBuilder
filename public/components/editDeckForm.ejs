@@ -36,14 +36,14 @@
         <input id="editValuesInput" name="changes" type="hidden" value="[]">
     </form>
     <div id="addCardSearchContainer" class="body-container">
-        <form id="addCardSearchForm">
-            <div id="cardNotLegalErr" class="input-group hide-container">
+        <form id="addCardSearchForm" autocomplete="off">
+            <div id="cardNotFoundErr" class="input-group hide-container">
                 <h3 style="color:red">
-                    Card is not legal in Magic The Gathering Standard format
+                    <b>Card Not Found</b>
                 </h3>
             </div>
             <div class="input-group">
-                <input id="addCardSearch" name="name" type="text" class="form-control" placeholder="Search Card to Add">
+                <input id="addCardSearch" name="name" type="text" class="form-control typeahead" placeholder="Search Card to Add">
                 <div class="input-group-append">
                     <button id="addCardSearchSubmit" class="btn btn-secondary" type="button">
                         <i class="fa fa-plus"> Add</i>

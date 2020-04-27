@@ -30,21 +30,15 @@ class DeckService extends Service{
     async newDeck(userId,deckName) {
         try {
             const id = userId.toString();
-            this.validateNewDeck(id, deckName);
             return await this.repo.create({user: id, name: deckName});
 
         } catch (e) {
+            console.log(e);
             throw new Error(e);
         }
     }
     async getUserDecks(userId){
         return await this.repo.getUserDecks(userId);
-    }
-    validateNewDeck(id,name){
-        const valid = validation.validAddDeck(id,name);
-        if(!valid){
-            throw new Error('invalid user id or deck name');
-        }
     }
 
 }

@@ -13,13 +13,10 @@ class DeckRepository extends Repository{
             const deck = await super.retrieve(values);
             return await this.make(deck);
         }catch (e) {
-            console.log(e);
             throw new Error(e);
         }
     }
     async updateCards(deckId,modifications){
-        console.log(deckId);
-        console.log(modifications);
         try {
             let results = [];
             for (let i = 0; i < modifications.length; i++) {

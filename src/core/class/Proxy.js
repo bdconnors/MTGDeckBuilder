@@ -71,16 +71,25 @@ class Proxy{
     }
     async loadSymbols(){
         const response =  await this.api(process.env.PROXY_SYMBOLS);
-        this.symbols = response.data.data;
+        response.data.data.forEach((symbol)=>{
+            if(symbol.appears_in_mana_costs){
+                this.symbols.push({symbol:symbol.symbol,svg_uri:symbol.svg_uri});
+            }
+        });
     }
     getManaSymbols(manaCost){
         let symbols = [];
         this.symbols.forEach((symbol)=>{
-            if(manaCost.includes(symbol.symbol)){
-                symbols.push(symbol);
+            if(symbol) {
+                const occurrenceCount = manaCost.split(symbol.symbol).length - 1;
+                if (occurrenceCount > 0) {
+                    for (let i = 0; i < occurrenceCount; i++) {
+                        symbols.push(symbol);
+                    }
+                }
             }
         });
-        return symbols;
+        return symbols
     }
 }
 

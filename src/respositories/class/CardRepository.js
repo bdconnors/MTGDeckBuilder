@@ -7,16 +7,25 @@ class CardRepository extends Repository{
         super('deck_card',database);
         this.proxy = proxy;
     }
+    async suggestNames(query){
+        return await this.proxy.getSuggestedNames(query);
+    }
+    async retrieveExactNameMatch(name){
+        const response = await this.proxy.getCardByNameExact(name);
+        if(response.data.object === "list"){
+            return this.make(response.data.data[0]);
+        }else{
+            return false;
+        }
+    }
     async retrieve(query){
         const response = await this.proxy.search(query); //gets the card data returned from the api
         return await this.makeSearchResults(response);
     }
     async makeSearchResults(response){
-        console.log("Number of cards received: " + response.total);
         const searchResults = new SearchResults(response.total);
         searchResults.results = await this.makeMany(response.data);
         searchResults.currentPage = response.page;
-        console.log('card repo makeSearchResults() done');
         return searchResults;
     }
     async makeMany(data){

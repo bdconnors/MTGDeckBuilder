@@ -3,8 +3,13 @@
 <div class="body-container" style="text-align: center;">
     <h1 class="mt-12 text-lg font-semibold"><%=deck.name%></h1>
 </div>
+<%let scripts = ['navigation']%>
 <%if(session.user){%>
-    <%if(session.user.id === deck.user){%>
+    <%if(session.user.id === deck.user){
+        scripts.push('AutoComplete');
+        scripts.push('DeckModification');
+        scripts.push('deck');
+    %>
         <div class="container">
             <%-include('components/editDeckForm',{deck:deck})%>
         </div>
@@ -13,4 +18,4 @@
 <div class="container">
     <%-include('components/deckContents',{session:session,deck:deck})%>
 </div>
-<%-include('./components/foot',{scripts:['navigation','deck'],styles:['navigation','deck']})%>
+<%-include('./components/foot',{scripts:scripts,styles:['navigation','deck']})%>

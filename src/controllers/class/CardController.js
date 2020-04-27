@@ -8,15 +8,14 @@ class CardController extends Controller{
         const search = await this.service.search({});
         res.render('cardsIndex',{session:req.session,search:search});
     }
-    async search(req,res){
-        let results;
-        const hasQuery =  Object.keys(req.query).length > 0;
-        if(hasQuery){
-            results = await this.service.search(req.query);
-        }else{
-            results = await this.service.search({});
-        }
-        res.send(results);
+    async autoComplete(req,res){
+        const suggestions = await this.service.autoCompleteName(req.query);
+        res.send({options:suggestions});
+    }
+    async exactName(req,res){
+        const name = req.query.name;
+        const result = await this.service.getCardByExactName(name);
+        res.send(result);
     }
     async profile(req,res){
         const search = await this.service.search(req.params);
